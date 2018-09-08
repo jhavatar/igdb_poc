@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_pop"
+        android:title="Popularity"
+        android:icon="@drawable/ic_star_black_24dp"
+        />
+
+    <item
+        android:id="@+id/nav_user"
+        android:title="User Rating"
+        android:icon="@drawable/ic_thumb_up_black_24dp"
+       />
+
+    <item
+        android:id="@+id/nav_critic"
+        android:title="Critic Rating"
+        android:icon="@drawable/ic_event_seat_black_24dp"
+        />
+</menu>

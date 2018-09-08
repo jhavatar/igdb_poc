@@ -13,12 +13,15 @@ import retrofit2.http.Query
  */
 interface IgdbApi {
     companion object {
-        private const val PARAM_REQUIRED_GAME_FIELDS = "id,slug,name,summary,popularity,total_rating,cover,first_release_date"
+        private const val PARAM_REQUIRED_GAME_FIELDS = "id,slug,name,summary,popularity,rating,aggregated_rating,total_rating,cover,first_release_date"
     }
 
     @GET("games/?fields=$PARAM_REQUIRED_GAME_FIELDS&order=popularity:desc")
     fun getMostPopularGames(@Query("offset") offset: Int = 0, @Query("limit") limit: Int = 10): Single<List<IgdbGame>>
 
     @GET("games/?fields=$PARAM_REQUIRED_GAME_FIELDS&order=rating:desc")
-    fun getHighestRatestGames(@Query("offset") offset: Int = 0, @Query("limit") limit: Int = 10): Single<List<IgdbGame>>
+    fun getHighestUserRatedGames(@Query("offset") offset: Int = 0, @Query("limit") limit: Int = 10): Single<List<IgdbGame>>
+
+    @GET("games/?fields=$PARAM_REQUIRED_GAME_FIELDS&order=aggregated_rating:desc")
+    fun getHighestCriticRatedGames(@Query("offset") offset: Int = 0, @Query("limit") limit: Int = 10): Single<List<IgdbGame>>
 }

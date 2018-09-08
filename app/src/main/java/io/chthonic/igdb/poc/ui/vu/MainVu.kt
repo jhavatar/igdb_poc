@@ -5,6 +5,7 @@ import `in`.srain.cube.views.ptr.PtrHandler
 import android.app.Activity
 import android.content.Intent
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -27,7 +28,9 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.vu_main.view.*
 import timber.log.Timber
 import android.support.v4.app.ActivityOptionsCompat
+import android.view.MenuItem
 import android.widget.ImageView
+import io.chthonic.igdb.poc.data.model.Order
 
 
 /**
@@ -59,6 +62,12 @@ class MainVu(inflater: LayoutInflater,
     val gameSelectedObservable: Observable<Pair<IgdbGame, View>>
         get() = gameSelectedPublisher.hide()
 
+    private val orderSelectedPublisher: PublishSubject<Order> by lazy {
+        PublishSubject.create<Order>()
+    }
+    val orderSelectedObservable: Observable<Order>
+        get() = orderSelectedPublisher.hide()
+
     private val listView: RecyclerView by lazy {
         rootView.list_tickers
     }
@@ -74,6 +83,22 @@ class MainVu(inflater: LayoutInflater,
             }
         }
     }
+
+    private val navListener: BottomNavigationView.OnNavigationItemSelectedListener by lazy {
+        object: BottomNavigationView.OnNavigationItemSelectedListener {
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                val order = when (item.itemId) {
+                    R.id.nav_pop -> Order.POPULARITY
+                    R.id.nav_user -> Order.USER_REVIEW
+                    R.id.nav_critic -> Order.CRITIC_REVIEW
+                    else -> throw RuntimeException("OnNavigationItemReselectedListener: item id ${item.itemId} is not supported")
+                }
+                orderSelectedPublisher.onNext(order)
+                return true
+            }
+        }
+    }
+
     private val adapter: GameListAdapter by lazy {
         GameListAdapter(gameSelectedPublisher)
     }
@@ -125,6 +150,8 @@ class MainVu(inflater: LayoutInflater,
         val anim = SlideInUpAnimator(OvershootInterpolator(2.0f))
         listView.itemAnimator = anim //SlideInUpAnimator(OvershootInterpolator(2.0f))
 
+        rootView.bottom_nav.setOnNavigationItemSelectedListener(navListener)
+
         if (UiUtils.isHorizontal(rootView.resources)) {
             rootView.app_bar.setExpanded(false)
         }
@@ -135,6 +162,7 @@ class MainVu(inflater: LayoutInflater,
         listView.clearOnScrollListeners()
         rootView.pullToRefresh.setPtrHandler(null)
         rootView.app_bar.removeOnOffsetChangedListener(appBarOnChangeListener)
+        rootView.bottom_nav.setOnNavigationItemReselectedListener(null)
         super.onDestroy()
     }
 
@@ -310,12 +338,22 @@ class MainVu(inflater: LayoutInflater,
         }
     }
 
+    fun updateOrderSelection(order: Order) {
+        rootView.bottom_nav.setOnNavigationItemSelectedListener(null)
+        rootView.bottom_nav.selectedItemId = when (order) {
+            Order.POPULARITY -> R.id.nav_pop
+            Order.USER_REVIEW -> R.id.nav_user
+            Order.CRITIC_REVIEW -> R.id.nav_critic
+        }
+        rootView.bottom_nav.setOnNavigationItemSelectedListener(navListener)
+    }
+
     fun updateGames(nuGames: List<IgdbGame>) {
         val hadEmptyState = adapter.hasEmptyState
         val oldSize = adapter.gameList.size
         val newSize = nuGames.size
 
-        if (!hadEmptyState && (oldSize == newSize)) {
+        if (!hadEmptyState && (oldSize == newSize) && (nuGames == getGames())) {
             return
         }
         adapter.gameList = nuGames

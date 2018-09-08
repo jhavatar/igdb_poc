@@ -32,7 +32,11 @@ class IgdbService(prefs: SharedPreferences,
         return igdbApi.getMostPopularGames(page*PAGE_SIZE, PAGE_SIZE)
     }
 
-    fun fetchHighestRatedGames(page: Int = 0): Single<List<IgdbGame>> {
-        return igdbApi.getHighestRatestGames(page*PAGE_SIZE, PAGE_SIZE)
+    fun fetchHighestUserRatedGames(page: Int = 0): Single<List<IgdbGame>> {
+        return igdbApi.getHighestUserRatedGames(page*PAGE_SIZE, PAGE_SIZE)
+    }
+
+    fun fetchHighestCriticRatedGames(page: Int = 0): Single<List<IgdbGame>> {
+        return igdbApi.getHighestCriticRatedGames(page*PAGE_SIZE, PAGE_SIZE)
     }
 }

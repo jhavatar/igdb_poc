@@ -44,5 +44,5 @@ ext {
 
     versionName="0.0.1"
     versionCode=1
-    appName="IGDB"
+    appName="IGDB Top 100"
 }

@@ -8,6 +8,7 @@ import com.github.salomonbrys.kodein.lazy
 import io.chthonic.igdb.poc.App
 import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.igdb.poc.utils.UiUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,6 +40,8 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     @Volatile
     private var canLoadMore: Boolean = true
 
+    private var order: Order = Order.POPULARITY
+
     private val clearDispatcher: ThreadPoolDispatcher by lazy {
         newSingleThreadContext("clear")
     }
@@ -55,6 +58,8 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
         subscribeServiceListeners()
         subscribeVuListeners(vu)
         Timber.d("listeners subscribe completed")
+
+        vu.updateOrderSelection(order)
 
         if (lastPage == NO_PAGE) {
             fetchGames()
@@ -106,7 +111,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Timber.d("refreshObservable success")
-                    refreshGames()
+                    refreshGames(true)
 
                 }, {t: Throwable ->
                     Timber.e(t, "refreshObservable failed")
@@ -126,6 +131,19 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({event: Pair<IgdbGame, View> ->
                     vu.displayGame(event.first, event.second)
+
+                }, {t: Throwable ->
+                    Timber.e(t, "gameSelectedObservable failed")
+                }))
+
+        rxSubs.add(vu.orderSelectedObservable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({nuOrder: Order ->
+                    Timber.d("orderSelectedObservable: nuOrder = $nuOrder, order = $order")
+                    if (nuOrder != order) {
+                        order = nuOrder
+                        refreshGames(false)
+                    }
 
                 }, {t: Throwable ->
                     Timber.e(t, "gameSelectedObservable failed")
@@ -165,10 +183,10 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     }
 
 
-    fun refreshGames() {
+    fun refreshGames(pullToRefresh: Boolean) {
         canLoadMore = true
         lastPage = NO_PAGE
-        fetchGames(false)
+        fetchGames(!pullToRefresh)
     }
 
     fun fetchGames(forceDisplayLoading: Boolean? = null) {
@@ -185,26 +203,32 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
             vu?.showLoading()
         }
 
-        rxSubs.add(igdbService.fetchMostPopularGames(page)
+        val query = when(order) {
+            Order.POPULARITY -> igdbService.fetchMostPopularGames(page)
+            Order.USER_REVIEW -> igdbService.fetchHighestUserRatedGames(page)
+            Order.CRITIC_REVIEW -> igdbService.fetchHighestCriticRatedGames(page)
+        }
+        rxSubs.add(query
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({gameList ->
-                    Timber.d("fetchMostPopularGames: size = ${gameList.size}")
+                    Timber.d("fetchGames: size = ${gameList.size}")
                     onGamesFetched(gameList)
                     loadingBusy = false
                     vu?.hideLoading()
 
                 }, {t: Throwable ->
-                    Timber.e(t, "fetchMostPopularGames failed.")
+                    Timber.e(t, "fetchGames failed.")
                     loadingBusy = false
                     vu?.hideLoading()
                 }))
     }
 
     private fun onGamesFetched(gameList: List<IgdbGame>) {
-        Timber.d("fetchMostPopularGames: size = ${gameList.size}")
+        val page = getNextPage()
+        Timber.d("onGamesFetched: size = ${gameList.size}, page = $page")
         vu?.let {
-            val page = getNextPage()
+
             lastPage = page
             canLoadMore = (page < LAST_PAGE) && ((page >= FIRST_PAGE) && (gameList.size >= IgdbService.PAGE_SIZE))
 

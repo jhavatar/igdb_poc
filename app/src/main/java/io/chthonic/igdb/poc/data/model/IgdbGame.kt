@@ -12,6 +12,8 @@ data class IgdbGame(val id: Long,
                     val name: String,
                     val summary: String? = null,
                     val popularity: Double? = null,
+                    val rating: Double? = null,
+                    val aggregated_rating: Double? = null,
                     val total_rating: Double? = null,
                     val first_release_date: Long? = null,
                     val cover: IgdbImage? = null): Parcelable
