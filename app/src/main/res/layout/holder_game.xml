@@ -28,7 +28,7 @@
     <TextView
         android:id="@+id/game_name"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
         tools:text="Name"
@@ -46,8 +46,8 @@
     <TextView
         android:id="@+id/game_date"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:text="Updated 09:24:30"
+        android:layout_height="wrap_content"
+        tools:text="Release 09:24:30"
         style="@style/ListSecondaryText"
         android:layout_marginTop="@dimen/pad_small"
         android:layout_marginEnd="@dimen/pad_xlarge"
