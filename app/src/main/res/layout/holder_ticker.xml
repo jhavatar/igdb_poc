@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/list_item_height"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true">
+
+    <View
+        android:id="@+id/ticker_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ticker_image"
+        tools:visibility="visible"
+        android:visibility="visible"
+        android:background="@color/primaryDarkColor"
+        />
+
+    <View
+        android:id="@+id/ticker_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="0dp"
+        android:background="@color/primaryLightColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ticker_left"
+        app:layout_constraintEnd_toStartOf="@+id/ticker_name"
+        tools:visibility="visible"
+        android:visibility="invisible"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ticker_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/pad_xlarge"
+        android:layout_marginTop="@dimen/pad_xlarge"
+        android:layout_marginBottom="@dimen/pad_xlarge"
+        app:civ_border_color="@color/primaryDarkColor"
+        app:civ_border_width="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_zar_320px"
+        app:civ_circle_background_color="@color/white"
+        app:layout_constraintVertical_bias="0.5"
+        />
+
+    <ImageView
+        android:id="@+id/ticker_selected"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintLeft_toLeftOf="@id/ticker_image"
+        app:layout_constraintRight_toRightOf="@id/ticker_image"
+        app:layout_constraintBottom_toBottomOf="@id/ticker_image"
+        app:layout_constraintTop_toTopOf="@id/ticker_image"
+        android:src="@drawable/ic_check_black_24dp"
+        android:tint="@color/primaryColor"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/ticker_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/ticker_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        android:layout_marginStart="@dimen/pad_xxlarge"
+        tools:text="ZAR"
+        style="@style/ListPrimaryText"/>
+
+    <TextView
+        android:id="@+id/ticker_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/ticker_name"
+        app:layout_constraintEnd_toStartOf="@+id/ticker_price"
+        app:layout_constraintTop_toBottomOf="@id/ticker_name"
+        app:layout_constraintHorizontal_bias="0"
+        tools:text="Updated 09:24:30"
+        android:layout_marginTop="@dimen/pad_small"
+        style="@style/ListSecondaryText"/>
+    <!--app:layout_constraintTop_toBottomOf="@id/ticker_name"-->
+
+    <TextView
+        android:id="@+id/ticker_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ticker_date"
+        app:layout_constraintHorizontal_bias="1"
+        tools:text="R100"
+        style="@style/ListPrimaryText"
+        android:ellipsize="end"
+        android:maxLines="1"
+        />
+
+    <!--<View-->
+        <!--android:id="@+id/ticker_disabled"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:background="@color/grey_trans"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--android:visibility="visible"-->
+        <!--android:translationZ="2dp"-->
+        <!--android:elevation="10dp"-->
+        <!--/>-->
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/list_item_height"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/pad_xlarge">
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/game_image"
+        android:layout_width="@dimen/circle_image_size"
+        android:layout_height="@dimen/circle_image_size"
+        app:civ_border_color="@color/primaryDarkColor"
+        app:civ_border_width="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_zar_320px"
+        app:civ_circle_background_color="@color/white"
+        app:layout_constraintVertical_bias="0.5"
+        />
+
+    <TextView
+        android:id="@+id/game_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        tools:text="Name"
+        style="@style/ListPrimaryText"
+        android:layout_marginStart="@dimen/pad_xlarge"
+        app:layout_goneMarginStart="0dp"
+        android:layout_marginEnd="@dimen/pad_xlarge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/game_date"
+        app:layout_constraintStart_toEndOf="@+id/game_image"
+        app:layout_constraintEnd_toStartOf="@+id/game_value"
+        app:layout_constraintVertical_chainStyle="spread"
+        />
+
+    <TextView
+        android:id="@+id/game_date"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:text="Updated 09:24:30"
+        style="@style/ListSecondaryText"
+        android:layout_marginTop="@dimen/pad_small"
+        android:layout_marginEnd="@dimen/pad_xlarge"
+        app:layout_constraintTop_toBottomOf="@id/game_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/game_name"
+        app:layout_constraintEnd_toStartOf="@+id/game_value"
+        app:layout_constraintHorizontal_bias="0"
+        />
+
+    <TextView
+        android:id="@+id/game_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        tools:text="#10"
+        style="@style/ListValueText"
+        android:maxLines="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        />
+
+</android.support.constraint.ConstraintLayout>

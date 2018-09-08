@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#26a69a</color>
+    <!--<color name="primaryLightColor">#64d8cb</color>-->
+    <color name="primaryLightColor">#3baea4</color>
+    <color name="primaryDarkColor">#00695c</color>
+    <color name="primaryDarkestColor">#004d40</color>
+    <color name="secondaryColor">#FF9900</color>
+    <color name="secondaryLightColor">#ffca47</color>
+    <color name="secondaryDarkColor">#c66a00</color>
+    <color name="primaryTextColor">@color/grey_xlight</color>
+    <color name="secondaryTextColor">#000000</color>
+
+    <color name="windowBackground">@color/white</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white10">#1AFFFFFF</color>
+    <color name="white30">#4DFFFFFF</color>
+    <color name="white50">#80FFFFFF</color>
+
+    <color name="grey_xlight">#eeeeee</color>
+    <color name="grey_light">#9e9e9e</color>
+    <color name="grey_medium">#616161</color>
+    <color name="grey_dark">#424242</color>
+    <color name="grey_trans">#7fffffff</color>
+
+    <color name="primaryColor90">#e626a69a</color>
+    <color name="primaryColor75">#bf26a69a</color>
+    <color name="primaryColor50">#7f26a69a</color>
+    <color name="primaryColor25">#4026a69a</color>
+
+    <color name="primaryLightColor90">#e63baea4</color>
+    <color name="primaryLightColor75">#bf3baea4</color>
+    <color name="primaryLightColor50">#7f3baea4</color>
+    <color name="primaryLightColor25">#403baea4</color>
+
+    <color name="primaryDarkColor75">#bf00766c</color>
+    <color name="primaryDarkColor90">#e600766c</color>
+</resources>
