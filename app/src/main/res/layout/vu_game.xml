@@ -27,7 +27,6 @@
             app:title="Hello World"
             app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded.Shadow"
             >
-            <!--app:contentScrim="?android:attr/colorPrimary"-->
 
             <ImageView
                 android:layout_width="match_parent"
@@ -51,7 +50,6 @@
                 />
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -104,11 +102,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/game_card"
                 android:layout_marginTop="@dimen/pad_xlarge"
+                android:layout_marginBottom="@dimen/pad_xlarge"
                 android:padding="@dimen/pad_medium"
                 app:cardCornerRadius="@dimen/card_corner_radius"
                 app:layout_constraintTop_toBottomOf="@id/barrier_row1"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 >
 
                 <android.support.constraint.ConstraintLayout
@@ -144,6 +145,7 @@
                             style="@style/MetaText"
                             tools:text="22.44"
                             android:gravity="center"
+                            android:layout_marginTop="@dimen/pad_xsmall"
                             />
 
                     </LinearLayout>
@@ -177,6 +179,7 @@
                             style="@style/MetaText"
                             tools:text="22.44"
                             android:gravity="center"
+                            android:layout_marginTop="@dimen/pad_xsmall"
                             />
 
                     </LinearLayout>
@@ -209,6 +212,7 @@
                             style="@style/MetaText"
                             tools:text="22.44"
                             android:gravity="center"
+                            android:layout_marginTop="@dimen/pad_xsmall"
                             />
 
                     </LinearLayout>

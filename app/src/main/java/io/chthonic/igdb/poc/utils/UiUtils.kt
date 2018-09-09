@@ -6,6 +6,9 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Rect
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -55,6 +58,15 @@ object UiUtils {
                 .buildRect(text, Color.TRANSPARENT)
     }
 
+    fun fromHtml(text: String): Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+
+        } else {
+            @Suppress("DEPRECATION")
+            Html.fromHtml("text")
+        }
+    }
 
     fun isHorizontal(res: Resources): Boolean {
         return res.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

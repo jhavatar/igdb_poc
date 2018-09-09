@@ -25,7 +25,6 @@
     <dimen name="loading_container_dimen">104dp</dimen>
 
     <dimen name="list_item_height">88dp</dimen>
-    <!--<dimen name="list_image_size">40dp</dimen>-->
 
     <dimen name="input_bar_height">56dp</dimen>
 
@@ -37,5 +36,5 @@
 
     <dimen name="card_corner_radius">8dp</dimen>
 
-    <dimen name="small_image_size">16dp</dimen>
+    <dimen name="small_image_size">24dp</dimen>
 </resources>

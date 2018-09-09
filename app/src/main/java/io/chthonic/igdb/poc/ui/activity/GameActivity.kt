@@ -1,6 +1,7 @@
 package io.chthonic.igdb.poc.ui.activity
 
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import com.squareup.picasso.Picasso
 import io.chthonic.igdb.poc.R
@@ -36,17 +37,13 @@ class GameActivity: BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
         this.toolbar_collapse.title = game.name
-//        this.toolbar_collapse.contentScrim
 
         val imageView = this.game_image
         val height = IgdbImage.WIDTH_LARGE
         val width = IgdbImage.HEIGHT_LARGE
         val params = imageView.layoutParams
         params.height = UiUtils.getMaxHeightForMaxWidth(this, width, height, 0.4)
-//        if ((height != null) && (width != null)) {
-//
-//
-//        }
+
 
         val largeUrl = game.cover?.largeUrl
         if (largeUrl != null) {
@@ -55,10 +52,7 @@ class GameActivity: BaseActivity() {
                     .into(imageView)
 
         } else {
-//            params.height = toolbar.height + 1
-//            imageView.visibility = View.INVISIBLE
             app_bar.setExpanded(false)
-//            supportActionBar?.title = game.name
         }
 
         val summary = game.summary
@@ -70,7 +64,7 @@ class GameActivity: BaseActivity() {
         }
 
         if (rank > 0) {
-            this.game_rank.text = "Ranked: #$rank"
+            this.game_rank.text = UiUtils.fromHtml("<b>Ranked:</b> #$rank")
 
         } else {
             this.game_summary.visibility = View.GONE
@@ -78,7 +72,7 @@ class GameActivity: BaseActivity() {
 
         val date = game.first_release_date
         if (date != null) {
-            this.game_date.text = "Release: ${TextUtils.getDateTimeString(date)}"
+            this.game_date.text = UiUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateTimeString(date)}")
 
         } else {
             this.game_date.visibility = View.GONE
