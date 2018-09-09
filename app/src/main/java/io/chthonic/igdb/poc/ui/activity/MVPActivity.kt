@@ -2,7 +2,6 @@ package io.chthonic.igdb.poc.ui.activity
 
 import android.os.Bundle
 import android.support.v4.app.LoaderManager
-import android.support.v7.app.AppCompatActivity
 import io.chthonic.mythos.mvp.MVPDispatcher
 import io.chthonic.mythos.mvp.Presenter
 import io.chthonic.mythos.mvp.Vu

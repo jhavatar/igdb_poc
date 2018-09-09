@@ -1,10 +1,6 @@
 package io.chthonic.igdb.poc.ui.activity
 
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import com.squareup.picasso.Picasso
 import io.chthonic.igdb.poc.R
@@ -49,7 +45,7 @@ class GameActivity: BaseActivity() {
         val width = IgdbImage.HEIGHT_LARGE
         val params = imageView.layoutParams
         params.height = UiUtils.getMaxHeightForMaxWidth(this, width, height, 0.4)
-        
+
         val largeUrl = game.cover?.largeUrl
         if (largeUrl != null) {
 
