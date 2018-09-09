@@ -10,7 +10,7 @@ import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.vu.MainVu
-import io.chthonic.igdb.poc.utils.UiUtils
+import io.chthonic.igdb.poc.utils.NetUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.ThreadPoolDispatcher
@@ -136,6 +136,14 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
         if (!canLoadMore || loadingBusy) {
             return
         }
+
+        vu?.let{
+            if (!NetUtils.isOnline(it.activity)) {
+                it.showOffline()
+                return
+            }
+        }
+
         loadingBusy = true
         val page = getNextPage()
         Timber.d("fetchGames: page = $page, lastPage = $lastPage, loadingBusy = $loadingBusy, canLoadMore = $canLoadMore")
@@ -162,6 +170,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
 
                 }, {t: Throwable ->
                     Timber.e(t, "fetchGames failed.")
+                    vu?.showError(t.message ?: "fetchGames failed")
                     loadingBusy = false
                     vu?.hideLoading()
                 }))
@@ -183,6 +192,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
             }
         }
     }
+
 
     private fun getNextPage(): Int {
         return Math.max(lastPage + 1, FIRST_PAGE)

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.RxView
+import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.ui.viewholder.EmptyStateHolder
 import io.chthonic.igdb.poc.ui.viewholder.GameHolder
@@ -14,12 +15,16 @@ import io.reactivex.subjects.PublishSubject
  */
 class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<IgdbGame, View>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    companion object {
+        private const val TYPE_EMPTY = 0
+        private const val TYPE_GAME = 1
+    }
+
     var hasValidData = false
         private set
 
     val hasEmptyState: Boolean
-    // only display empty state after valid data is set
-        get() = hasValidData && gameList.isEmpty()
+        get() = hasValidData && gameList.isEmpty() // only display empty state after valid data is set
 
     var gameList: List<IgdbGame> = listOf()
         set(value) {
@@ -33,6 +38,14 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<Igd
             field = value
             hasValidData = true
         }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (hasEmptyState) {
+            TYPE_EMPTY
+        } else {
+            TYPE_GAME
+        }
+    }
 
     override fun getItemCount(): Int {
         return if (hasEmptyState) {
@@ -54,7 +67,7 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<Igd
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is EmptyStateHolder) {
-            holder.update(true, errorMessage)
+            holder.update(errorMessage == holder.itemView.context.getString(R.string.error_no_internet), errorMessage)
 
         } else if (holder is GameHolder) {
             val game = gameList[position]

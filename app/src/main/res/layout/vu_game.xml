@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/game_summary"
                 android:text="summary"
-                style="@style/SummeryText"/>
+                style="@style/ContentText"/>
 
             <!--<ImageView-->
             <!--android:layout_width="match_parent"-->

@@ -22,29 +22,25 @@
         app:layout_constraintVertical_bias="@dimen/empty_state_vertical_bias"
         >
 
-        <TextView
-            android:id="@+id/empty_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/label_large"
-            android:gravity="center"
-            android:textAllCaps="true"
-            />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/empty_icon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/label_small"
-            android:paddingBottom="@dimen/label_small"
+            android:layout_height="@dimen/circle_image_size"
+            android:layout_marginTop="@dimen/label_small"
+            android:layout_marginBottom="@dimen/label_small"
+            app:srcCompat="@drawable/ic_error_black_24dp"
+            android:scaleType="fitCenter"
+            app:tint="@color/colorAccent"
             />
 
         <TextView
             android:id="@+id/empty_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/label_small"
+            android:textSize="@dimen/label_medium"
             android:gravity="center"
+            style="@style/ContentText"
             />
 
     </LinearLayout>

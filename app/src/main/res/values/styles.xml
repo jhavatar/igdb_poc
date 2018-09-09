@@ -50,7 +50,7 @@
         <item name="android:textSize">@dimen/label_small</item>
     </style>
 
-    <style name="SummeryText" parent="@android:style/TextAppearance">
+    <style name="ContentText" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/grey_medium</item>
         <item name="android:textSize">@dimen/label_medium</item>
     </style>

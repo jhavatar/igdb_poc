@@ -28,6 +28,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.vu_main.view.*
 import timber.log.Timber
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearSmoothScroller
 import android.view.MenuItem
 import android.widget.ImageView
@@ -184,6 +185,18 @@ class MainVu(inflater: LayoutInflater,
         rootView.bottom_nav.setOnNavigationItemSelectedListener(navListener)
     }
 
+    fun showOffline() {
+        showError(activity.getString(R.string.error_no_internet))
+    }
+
+    fun showError(errorMsg: String) {
+        rootView.pullToRefresh.refreshComplete()
+        if ((adapter.errorMessage != errorMsg) || !adapter.hasValidData) {
+            adapter.errorMessage = errorMsg
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     fun appendGames(nuGames: List<IgdbGame>) {
         val hadEmptyState = adapter.hasEmptyState
         val games = adapter.gameList.toMutableList()
@@ -209,8 +222,10 @@ class MainVu(inflater: LayoutInflater,
         val hadEmptyState = adapter.hasEmptyState
         val oldSize = adapter.gameList.size
         val newSize = nuGames.size
+        Timber.d("updateGames: hadEmptyState = $hadEmptyState, oldSize = $oldSize, newSize = $newSize")
 
         if (!hadEmptyState && (oldSize == newSize) && (nuGames == getGames())) {
+            Timber.d("updateGames: return")
             return
         }
         adapter.gameList = nuGames
@@ -221,6 +236,7 @@ class MainVu(inflater: LayoutInflater,
 
         } else if (oldSize == 0) {
             if (hadEmptyState) {
+                Timber.d("updateGames: notifyItemRangeChanged, notifyItemRangeInserted")
                 adapter.notifyItemRangeChanged(0, 1)
                 adapter.notifyItemRangeInserted(1, newSize - 1)
 

@@ -36,7 +36,7 @@ data class IgdbImage(val cloudinary_id: String,
             } ?: null
         }
 
-    fun genUrl(size: String): String {
+    private fun genUrl(size: String): String {
        return  "http://images.igdb.com/igdb/image/upload/t_$size/$cloudinary_id.jpg"
     }
 }
