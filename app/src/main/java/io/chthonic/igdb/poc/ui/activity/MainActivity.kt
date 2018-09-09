@@ -28,6 +28,8 @@ class MainActivity : MVPActivity<MainPresenter, MainVu>() {
         @Suppress("UNCHECKED_CAST")
         val viewModel = ViewModelProviders.of(this).get(MVP_UID.toString(), PesenterCacheViewModel::class.java)
                 as PesenterCacheViewModel<MainPresenter>
+
+        // store/retrieve MVP's presenter on ViewModel (unfortunate name) object: ViewModel is lifecycle aware and has features like surviving rotation
         val presenterCache = viewModel.cache ?: run {
             val cache = PresenterCacheBasicLazy({ MainPresenter() }, false)
             viewModel.cache = cache
@@ -39,8 +41,8 @@ class MainActivity : MVPActivity<MainPresenter, MainVu>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // remove splash theme
-        this.setTheme(R.style.AppTheme_NoActionBar)
+        // NB, remove splash theme before super.onCreate
+        this.setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
     }
 

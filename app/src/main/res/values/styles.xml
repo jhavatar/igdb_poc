@@ -16,12 +16,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
+    <!--<style name="AppTheme.NoActionBar">-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+    <!--</style>-->
 
-    <style name="AppThemeSplash" parent="@style/AppTheme.NoActionBar">
+    <style name="AppThemeSplash" parent="@style/AppTheme">
         <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
