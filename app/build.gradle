@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -79,9 +79,8 @@ androidExtensions {
 repositories {
     jcenter()
     mavenCentral()
-    maven {
-        url 'https://jitpack.io'
-    }
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
@@ -95,7 +94,9 @@ dependencies {
 
     // firebase
 //    implementation "com.google.firebase:firebase-core:${rootProject.ext.firebaseVersion}"
-//    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+        transitive = true;
+    }
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
