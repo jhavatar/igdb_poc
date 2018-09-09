@@ -260,8 +260,8 @@ class MainVu(inflater: LayoutInflater,
         val sharedView = sharedViewRef.get()
         if ((game.cover?.largeUrl != null) && (sharedView != null)) {
 
-            // inform new activity of shared view for animation
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView, "cover")
+            // inform new activity of shared view animation
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView, activity.getString(R.string.shared_view_transition_name))
             activity.startActivity(intent, options.toBundle())
 
         } else {
