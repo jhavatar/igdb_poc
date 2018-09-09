@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.ThreadPoolDispatcher
 import kotlinx.coroutines.experimental.newSingleThreadContext
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 
 /**
@@ -108,8 +109,8 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
 
         rxSubs.add(vu.gameSelectedObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({event: Triple<IgdbGame, Int, View> ->
-                    vu.displayGame(event.first, event.second + 1, event.third)
+                .subscribe({event: Triple<IgdbGame, Int, WeakReference<View>> ->
+                    vu.displayGame(event.first, event.second + 1, order, event.third)
 
                 }, {t: Throwable ->
                     Timber.e(t, "gameSelectedObservable failed")

@@ -9,18 +9,19 @@ import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.ui.viewholder.EmptyStateHolder
 import io.chthonic.igdb.poc.ui.viewholder.GameHolder
 import io.reactivex.subjects.PublishSubject
+import java.lang.ref.WeakReference
 
 /**
  * Created by jhavatar on 9/8/2018.
  */
-class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, View>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, WeakReference<View>>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_EMPTY = 0
         private const val TYPE_GAME = 1
     }
 
-    // Is true if a value has been explicitly set, data or error
+    // Is true if a value has been explicitly set, be it data or error
     var hasValidData = false
         private set
 
@@ -76,7 +77,7 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<I
             holder.update(game)
             RxView.clicks(holder.clickView)
                     .map {
-                        Triple(game, position, holder.imageView)
+                        Triple(game, position, WeakReference<View>(holder.imageView))
                     }
                     .subscribeWith(gameSelectedPublisher)
 

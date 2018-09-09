@@ -9,7 +9,6 @@ sealed class Order(val id: Int)  {
             return listOf(POPULARITY, USER_REVIEW, CRITIC_REVIEW).firstOrNull() {
                 it.id == id
             } ?: fallback
-
         }
     }
 

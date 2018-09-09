@@ -7,13 +7,17 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Build
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.Html
 import android.text.Spanned
 import android.util.TypedValue
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.amulyakhare.textdrawable.TextDrawable
 import io.chthonic.igdb.poc.R
+import kotlinx.android.synthetic.main.activity_game.*
 import timber.log.Timber
 
 
@@ -56,6 +60,10 @@ object UiUtils {
                 .width(width) // size in px
                 .endConfig()
                 .buildRect(text, Color.TRANSPARENT)
+    }
+
+    fun tintImageView(imageView: ImageView, activity: Activity, colorRef: Int) {
+        DrawableCompat.setTint(imageView.getDrawable(), ContextCompat.getColor(activity.getApplicationContext(), colorRef))
     }
 
     fun fromHtml(text: String): Spanned {

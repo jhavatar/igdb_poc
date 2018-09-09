@@ -21,7 +21,6 @@ import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.activity.GameActivity
 import io.chthonic.igdb.poc.ui.adapter.GameListAdapter
-import io.chthonic.igdb.poc.ui.presenter.GamePresenter
 import io.chthonic.igdb.poc.ui.view.InfiniteLinearScrollListener
 import io.chthonic.igdb.poc.utils.UiUtils
 import io.reactivex.Observable
@@ -29,11 +28,9 @@ import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.vu_main.view.*
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 
-/**
- * Created by jhavatar on 3/28/2018.
- */
 class MainVu(inflater: LayoutInflater,
              activity: Activity,
              fragment: Fragment? = null,
@@ -53,10 +50,11 @@ class MainVu(inflater: LayoutInflater,
         PublishSubject.create<Int>()
     }
 
-    private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, View>> by lazy {
-        PublishSubject.create<Triple<IgdbGame, Int, View>>()
+    // Note, WeakReference to prevent memory leak
+    private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, WeakReference<View>>> by lazy {
+        PublishSubject.create<Triple<IgdbGame, Int, WeakReference<View>>>()
     }
-    val gameSelectedObservable: Observable<Triple<IgdbGame, Int, View>>
+    val gameSelectedObservable: Observable<Triple<IgdbGame, Int, WeakReference<View>>>
         get() = gameSelectedPublisher.hide()
 
     private val orderSelectedPublisher: PublishSubject<Order> by lazy {
@@ -253,15 +251,17 @@ class MainVu(inflater: LayoutInflater,
     }
 
 
-    fun displayGame(game: IgdbGame, rank: Int, sharedView: View) {
+    fun displayGame(game: IgdbGame, rank: Int, order:Order, sharedViewRef: WeakReference<View>) {
         val intent = Intent(activity, GameActivity::class.java)
-        intent.putExtra(GamePresenter.KEY_GAME, game)
+        intent.putExtra(GameActivity.KEY_GAME, game)
         intent.putExtra(GameActivity.KEY_RANK, rank)
+        intent.putExtra(GameActivity.KEY_ORDER, order.id)
 
-        if (game.cover?.largeUrl != null) {
+        val sharedView = sharedViewRef.get()
+        if ((game.cover?.largeUrl != null) && (sharedView != null)) {
 
             // inform new activity of shared view for animation
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView as View, "cover")
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView, "cover")
             activity.startActivity(intent, options.toBundle())
 
         } else {
