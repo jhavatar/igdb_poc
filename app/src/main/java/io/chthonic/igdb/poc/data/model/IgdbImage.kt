@@ -26,14 +26,14 @@ data class IgdbImage(val cloudinary_id: String,
                         .scheme("http")
                         .build()
                         .toString()
-            } ?: null
+            }
         }
 
     val largeUrl: String?
         get() {
             return url?.let {
                 genUrl("cover_big")
-            } ?: null
+            }
         }
 
     private fun genUrl(size: String): String {

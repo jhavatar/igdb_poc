@@ -117,7 +117,7 @@ class MainVu(inflater: LayoutInflater,
         super.onCreate()
 
         (activity as AppCompatActivity).setSupportActionBar(rootView.toolbar)
-        activity?.supportActionBar?.setIcon(R.drawable.ic_action_bar)
+        activity.supportActionBar?.setIcon(R.drawable.ic_action_bar)
 
         listView.adapter = adapter
         listView.layoutManager = listLayoutManager

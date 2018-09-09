@@ -35,7 +35,7 @@ object UiUtils {
         val metrics = activity.resources.displayMetrics
         val deviceWidth = metrics.widthPixels
         val deviceHeight = metrics.heightPixels
-        val contentHeight = if (activity != null) getActivityContentHeight(activity) else Int.MAX_VALUE
+        val contentHeight = getActivityContentHeight(activity)
         Timber.d("getMaxHeightForMaxWidth: contentHeight = $contentHeight, deviceHeight = $deviceHeight")
         val maxHeight = (maxHeightScreenRatio * deviceHeight).toInt() //if (fullscreen) Math.min(deviceHeight, contentHeight) else deviceHeight/2 // design decision
         val heightPixels = ratio*deviceWidth
