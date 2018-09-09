@@ -98,7 +98,7 @@ class MainVu(inflater: LayoutInflater,
         return adapter.gameList
     }
 
-    fun setScrollListener(pageSize: Int? = null, preemptThresholdCount: Int = 0): Observable<Int> {
+    fun startScrollListening(pageSize: Int? = null, preemptThresholdCount: Int = 0): Observable<Int> {
         listView.clearOnScrollListeners()
         listView.addOnScrollListener(
                 object: InfiniteLinearScrollListener(listLayoutManager, pageSize, preemptThresholdCount) {
@@ -107,6 +107,10 @@ class MainVu(inflater: LayoutInflater,
                     }
                 })
         return scrollEndPublisher.hide()
+    }
+
+    fun stopScrollListening() {
+        listView.clearOnScrollListeners()
     }
 
     override fun onCreate() {
@@ -143,7 +147,7 @@ class MainVu(inflater: LayoutInflater,
 
     override fun onDestroy() {
         // prevent possble memory leaks
-        listView.clearOnScrollListeners()
+        stopScrollListening()
         rootView.pullToRefresh.setPtrHandler(null)
         rootView.bottom_nav.setOnNavigationItemReselectedListener(null)
         super.onDestroy()

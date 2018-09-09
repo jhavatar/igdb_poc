@@ -71,6 +71,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     }
 
     override fun onUnlink() {
+        vu?.stopScrollListening()
         vu?.hideLoading(true)
         super.onUnlink()
     }
@@ -91,7 +92,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
                     Timber.e(t, "refreshObservable failed")
                 }))
 
-        rxSubs.add(vu.setScrollListener()
+        rxSubs.add(vu.startScrollListening(pageSize = IgdbService.PAGE_SIZE)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({firstVisibleItemPosition: Int ->
                     Timber.d("setScrollListener: firstVisibleItemPosition = $firstVisibleItemPosition, lastPage = $lastPage, canLoadMore = $canLoadMore, loadingBusy = $loadingBusy")
