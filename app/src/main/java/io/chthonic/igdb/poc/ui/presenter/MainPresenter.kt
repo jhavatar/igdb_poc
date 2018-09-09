@@ -48,7 +48,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
 
         // read saved state if exists
         if (inState?.containsKey(KEY_ORDER) == true) {
-            order = Order.fromId(inState.getInt(KEY_ORDER), Order.POPULARITY)
+            order = Order.fromId(inState.getInt(KEY_ORDER), order)
         }
 
         // initialize state and make sure it represents ui

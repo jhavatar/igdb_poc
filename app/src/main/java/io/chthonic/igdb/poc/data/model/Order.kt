@@ -6,7 +6,7 @@ package io.chthonic.igdb.poc.data.model
 sealed class Order(val id: Int)  {
     companion object {
         fun fromId(id: Int, fallback: Order): Order {
-            return listOf(POPULARITY, USER_REVIEW, CRITIC_REVIEW).firstOrNull() {
+            return listOf(POPULARITY, USER_REVIEW, CRITIC_REVIEW).firstOrNull {
                 it.id == id
             } ?: fallback
         }
