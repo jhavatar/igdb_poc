@@ -1,11 +1,8 @@
 package io.chthonic.igdb.poc.data.rest
 
 import io.chthonic.igdb.poc.data.model.IgdbGame
-import io.chthonic.igdb.poc.data.model.TickerLot
 import io.reactivex.Single
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Query
 
 /**

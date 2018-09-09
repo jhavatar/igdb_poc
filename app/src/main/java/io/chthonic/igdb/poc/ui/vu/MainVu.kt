@@ -28,6 +28,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.vu_main.view.*
 import timber.log.Timber
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v7.widget.LinearSmoothScroller
 import android.view.MenuItem
 import android.widget.ImageView
 import io.chthonic.igdb.poc.data.model.Order
@@ -167,155 +168,21 @@ class MainVu(inflater: LayoutInflater,
     }
 
 
-//    private fun updateActivated(leftTickerIsSource: Boolean): Boolean {
-//        val activatedChange = (leftInfoLayout.isActivated != leftTickerIsSource) || (rightInfoLayout.isActivated != !leftTickerIsSource)
-//        if (!activatedChange) {
-//            return false
-//        }
-//
-//        leftInfoLayout.isActivated = leftTickerIsSource
-//        rootView.layout_left_input.isActivated = leftTickerIsSource
-//        rightInfoLayout.isActivated = !leftTickerIsSource
-//        rootView.layout_right_input.isActivated = !leftTickerIsSource
-//
-//        leftInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
-//                UiUtils.getCompoundDrawableForTextDrawable(
-//                        UiUtils.getCurrencySign(Currency.Bitcoin),
-//                        leftInput,
-//                        if (leftTickerIsSource) leftInput.resources.getColor(R.color.secondaryColor) else leftInput.currentTextColor),
-//                null,null, null)
-//
-//        return true
-//    }
-//
-//
-//    fun updateCalculation(calc: CalculationViewModel) {
-//        Timber.d("updateCalculation: calc = $calc")
-//        if (leftInput.isFocused != calc.leftTickerIsSource) {
-//            leftInput.requestFocus()
-//        }
-//        if (rightInput.isFocused != !calc.leftTickerIsSource) {
-//            rightInput.requestFocus()
-//        }
-//
-//        val convertDirectChanged = updateActivated(calc.leftTickerIsSource)
-//
-//        if (calc.forceSet || calc.leftTickerIsSource) {
-//            rightInput.removeTextChangedListener(rightInputWatcher)
-//            val text = calc.rightTicker?.price ?: TextUtils.PLACE_HOLDER_STRING
-//            val tooManyDigits = (text.length > rightInputLength)
-//
-//            if (tooManyDigits) {
-//                rightInput.setText(TextUtils.TOO_MANY_DIGITS_MSG)
-//
-//            } else {
-//                rightInput.setText(text)
-//            }
-//
-//            if (text == TextUtils.PLACE_HOLDER_STRING) {
-//                rightInput.isEnabled = false
-//
-//            } else {
-//
-//                // must be able to change text if selected
-//                if (!tooManyDigits || !calc.leftTickerIsSource) {
-//                    rightInput.addTextChangedListener(rightInputWatcher)
-//                    rightInput.isEnabled = true
-//
-//                } else {
-//                    rightInput.isEnabled = false
-//                }
-//            }
-//        }
-//
-//        if (calc.forceSet || !calc.leftTickerIsSource) {
-//            leftInput.removeTextChangedListener(leftInputWatcher)
-//            val text = calc.leftTicker?.price ?: TextUtils.PLACE_HOLDER_STRING
-////            Timber.d("setBitcoin: text = $text, length = ${text.length}, maxLength = ${leftInputLength}")
-//            if (text.length > leftInputLength) {
-//                leftInput.setText(TextUtils.TOO_MANY_DIGITS_MSG)
-//                if (calc.leftTickerIsSource) {
-//                    // must be able to change text if selected
-//                    leftInput.addTextChangedListener(leftInputWatcher)
-//
-//                } else {
-//                    leftInput.isEnabled = false
-//                }
-//
-//            } else {
-//                leftInput.isEnabled = true
-//                leftInput.setText(text)
-//                leftInput.addTextChangedListener(leftInputWatcher)
-//            }
-//        }
-//
-//        val nuLeftName = calc.leftTicker?.name ?: TextUtils.PLACE_HOLDER_STRING
-//        val leftNameChanged = leftName.text != nuLeftName
-//        // update left image and label
-//        if (leftNameChanged) {
-//            leftName.text = nuLeftName
-//            if (calc.leftTicker != null) {
-//                leftImage.setImageResource(UiUtils.getCurrencyVectorRes(calc.leftTicker.code))
-//
-//            } else {
-//                leftImage.setImageDrawable(null)
-//            }
-//        }
-//
-//        // update right compound image
-//        if (leftNameChanged || convertDirectChanged)  {
-//            if (calc.leftTicker != null) {
-//                leftInputWatcher.updateInputType(calc.leftTicker.decimalDigits)
-//                leftInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
-//                        UiUtils.getCompoundDrawableForTextDrawable(
-//                                UiUtils.getCurrencySign(ExchangeUtils.getCurrencyForTicker(calc.leftTicker.code)),
-//                                leftInput,
-//                                if (calc.leftTickerIsSource) leftInput.resources.getColor(R.color.secondaryColor) else leftInput.currentTextColor),
-//                        null, null, null)
-//
-//            } else {
-//                leftInput.setCompoundDrawablesRelative(null, null, null, null)
-//            }
-//        }
-//
-//
-//        val nuRightName = calc.rightTicker?.name ?: TextUtils.PLACE_HOLDER_STRING
-//        val rightNameChanged = rightName.text != nuRightName
-//
-//        // update right image and label
-//        if (rightNameChanged) {
-//            rightName.text = nuRightName
-//            if (calc.rightTicker != null) {
-//                rightImage.setImageResource(UiUtils.getCurrencyVectorRes(calc.rightTicker.code))
-//
-//            } else {
-//                rightImage.setImageDrawable(null)
-//            }
-//        }
-//
-//        // update right compound image
-//        if (rightNameChanged || convertDirectChanged)  {
-//            if (calc.rightTicker != null) {
-//                rightInputWatcher.updateInputType(calc.rightTicker.decimalDigits)
-//                rightInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
-//                        UiUtils.getCompoundDrawableForTextDrawable(
-//                                UiUtils.getCurrencySign(ExchangeUtils.getCurrencyForTicker(calc.rightTicker.code)),
-//                                rightInput,
-//                                if (!calc.leftTickerIsSource) rightInput.resources.getColor(R.color.secondaryColor) else rightInput.currentTextColor),
-//                        null, null, null)
-//
-//            } else {
-//                rightInput.setCompoundDrawablesRelative(null, null, null, null)
-//            }
-//        }
-//    }
-
-
     override fun hideLoading() {
         rootView.pullToRefresh.refreshComplete()
         super.hideLoading()
     }
 
+
+    fun updateOrderSelection(order: Order) {
+        rootView.bottom_nav.setOnNavigationItemSelectedListener(null)
+        rootView.bottom_nav.selectedItemId = when (order) {
+            Order.POPULARITY -> R.id.nav_pop
+            Order.USER_REVIEW -> R.id.nav_user
+            Order.CRITIC_REVIEW -> R.id.nav_critic
+        }
+        rootView.bottom_nav.setOnNavigationItemSelectedListener(navListener)
+    }
 
     fun appendGames(nuGames: List<IgdbGame>) {
         val hadEmptyState = adapter.hasEmptyState
@@ -336,16 +203,6 @@ class MainVu(inflater: LayoutInflater,
         } else {
             adapter.notifyItemRangeInserted(appendStart, nuGames.size)
         }
-    }
-
-    fun updateOrderSelection(order: Order) {
-        rootView.bottom_nav.setOnNavigationItemSelectedListener(null)
-        rootView.bottom_nav.selectedItemId = when (order) {
-            Order.POPULARITY -> R.id.nav_pop
-            Order.USER_REVIEW -> R.id.nav_user
-            Order.CRITIC_REVIEW -> R.id.nav_critic
-        }
-        rootView.bottom_nav.setOnNavigationItemSelectedListener(navListener)
     }
 
     fun updateGames(nuGames: List<IgdbGame>) {
@@ -393,6 +250,8 @@ class MainVu(inflater: LayoutInflater,
             adapter.notifyItemRangeChanged(0, newSize)
             adapter.notifyItemRangeRemoved(newSize, oldSize - newSize)
         }
+
+        listView.scrollToPosition(0)
     }
 
 
@@ -406,6 +265,5 @@ class MainVu(inflater: LayoutInflater,
         } else {
             activity.startActivity(intent)
         }
-
     }
 }

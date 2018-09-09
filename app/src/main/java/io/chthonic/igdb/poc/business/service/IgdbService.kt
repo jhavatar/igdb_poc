@@ -1,9 +1,6 @@
 package io.chthonic.igdb.poc.business.service
 
-import android.content.SharedPreferences
-import com.squareup.moshi.JsonAdapter
 import io.chthonic.igdb.poc.data.client.RestClient
-import io.chthonic.igdb.poc.data.model.ExchangeState
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.rest.IgdbApi
 import io.reactivex.Single
@@ -11,8 +8,7 @@ import io.reactivex.Single
 /**
  * Created by jhavatar on 3/25/2018.
  */
-class IgdbService(prefs: SharedPreferences,
-                  serializer: JsonAdapter<ExchangeState>) {
+class IgdbService() {
 
     companion object {
         private const val BASE_URL = "https://api-endpoint.igdb.com/"

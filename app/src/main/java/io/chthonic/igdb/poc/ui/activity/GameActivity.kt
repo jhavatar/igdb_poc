@@ -1,50 +1,25 @@
 package io.chthonic.igdb.poc.ui.activity
 
-import android.arch.lifecycle.ViewModelProviders
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.ui.presenter.GamePresenter
-import io.chthonic.igdb.poc.ui.vu.GameVu
 import io.chthonic.igdb.poc.utils.UiUtils
-import io.chthonic.mythos.mvp.MVPDispatcher
-import io.chthonic.mythos.mvp.PresenterCacheBasicLazy
-import io.chthonic.mythos.viewmodel.PesenterCacheViewModel
 import kotlinx.android.synthetic.main.vu_game.*
 import timber.log.Timber
 
 /**
  * Created by jhavatar on 9/8/2018.
  */
-class GameActivity: MVPActivity<GamePresenter, GameVu>() {
-
-    companion object {
-        private val MVP_UID by lazy {
-            GameActivity::class.hashCode()
-        }
-    }
-
-    override fun createMVPDispatcher(): MVPDispatcher<GamePresenter, GameVu> {
-        @Suppress("UNCHECKED_CAST")
-        val viewModel = ViewModelProviders.of(this).get(MVP_UID.toString(), PesenterCacheViewModel::class.java)
-                as PesenterCacheViewModel<GamePresenter>
-        val presenterCache = viewModel.cache ?: run {
-            val cache = PresenterCacheBasicLazy({ GamePresenter() }, false)
-            viewModel.cache = cache
-            cache
-        }
-        return MVPDispatcher(MVP_UID,
-                presenterCache,
-                ::GameVu)
-    }
+class GameActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.vu_game)
 
         val game = intent.getParcelableExtra<IgdbGame>(GamePresenter.KEY_GAME)
         Timber.d("OnCreate: game = $game")
@@ -85,22 +60,6 @@ class GameActivity: MVPActivity<GamePresenter, GameVu>() {
         } else {
             this.game_summary.visibility = View.GONE
         }
-
-
-//        Picasso.get()
-//                .load(game.cover!!.thumbnailUrl)
-//                .into(imageView, object: Callback {
-//                    override fun onSuccess() {
-//                        Timber.d("onSuccess: largeUrl = ${game.cover!!.largeUrl}")
-//                        Picasso.get()
-//                                .load(game.cover!!.largeUrl)
-//                                .into(imageView)
-//                    }
-//
-//                    override fun onError(e: Exception?) {
-//                    }
-//
-//                })
 
     }
 

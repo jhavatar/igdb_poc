@@ -7,7 +7,6 @@ import com.jakewharton.rxbinding2.view.RxView
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.ui.viewholder.EmptyStateHolder
 import io.chthonic.igdb.poc.ui.viewholder.GameHolder
-import io.chthonic.igdb.poc.ui.viewholder.TickerHolder
 import io.reactivex.subjects.PublishSubject
 
 /**

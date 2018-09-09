@@ -2,8 +2,6 @@ package io.chthonic.igdb.poc.utils
 
 import android.text.format.DateUtils
 import android.util.SparseArray
-import io.chthonic.igdb.poc.data.model.CurrencyRealtimeFormatInput
-import io.chthonic.igdb.poc.data.model.CurrencyRealtimeFormatOutput
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -85,21 +83,6 @@ object TextUtils {
 //        DecimalFormat(pattern, formatSymbols)
 //    }
 
-    fun formatCurrency(amount: BigDecimal?, decimalDigits: Int?, fallback: String = PLACE_HOLDER_STRING): String {
-        val verifiedDecimalDigits = decimalDigits ?: io.chthonic.igdb.poc.data.model.Currency.FIAT_DECIMAL_DIGITS
-        return if (amount != null) {
-            getDecimalFormatter(verifiedDecimalDigits).format(amount.setScale(verifiedDecimalDigits, RoundingMode.DOWN))
-//            if (isCrypto) {
-//                cryptoCurrencyFormat.format(amount.setScale(BITCOIN_DECIMAL_DIGITS, RoundingMode.DOWN))
-//
-//            } else {
-//                fiatCurrencyFormat.format(amount.setScale(FIAT_DECIMAL_DIGITS, RoundingMode.DOWN))
-//            }
-
-        } else {
-            fallback
-        }
-    }
 
     fun deFormatCurrency(s: String): String {
 //        Timber.d("deFormatCurrency: s = $s, result = ${s.replace(currencyFormatReplaceRegex, "")}")
@@ -119,68 +102,4 @@ object TextUtils {
 
 
 
-    fun realtimeFormatInput(input: CurrencyRealtimeFormatInput): CurrencyRealtimeFormatOutput {
-//        Timber.d("realtimeFormatInput: input = $input")
-
-        if (TextUtils.isCurrencyInWarningState(input.s)) {
-//            Timber.d("realtimeFormatInput: CurrencyInWarningState -> doNothing")
-            return CurrencyRealtimeFormatOutput(doNothing = true)
-        }
-
-        val prevDecimalPos = input.sPrev.indexOf(DECIMAL_SEPARATOR)
-        val caretIsDecimal = (prevDecimalPos >= 0) && (input.caretPos > input.sPrev.indexOf(DECIMAL_SEPARATOR))
-
-        val sRawTemp = if (TextUtils.wasCurrencyWarningState(input.sPrev, input.delAction) || input.s.isEmpty()) {
-            FALLBACK_CURRENCY_STRING
-
-        } else {
-            TextUtils.deFormatCurrency(input.s).let {
-                if (it.isEmpty()) {
-                    FALLBACK_CURRENCY_STRING
-                } else {
-                    it
-                }
-            }
-        }
-//        Timber.d("realtimeFormatInput: sRawTemp = $sRawTemp")
-
-        val sFormattedTemp = TextUtils.formatCurrency(BigDecimal(sRawTemp), input.decimalDigits)
-        val revert = (sFormattedTemp.length >= input.maxLength) || (input.changed == DECIMAL_SEPARATOR_STRING) || (input.changed == GROUPING_SEPARATOR_STRING)
-        val sFormatted = if (revert) {
-            input.sPrev
-
-        } else {
-            sFormattedTemp
-        }
-        val sRaw = deFormatCurrency(sFormatted)
-//        Timber.d("realtimeFormatInput:  sFormatted = $sFormatted, revert = $revert sFormattedTemp = $sFormattedTemp")
-
-        val delta = Math.max(1, Math.abs(sFormatted.length - input.sPrev.length))
-        val decimalPos = sFormatted.indexOf(DECIMAL_SEPARATOR)
-//        Timber.d("realtimeFormatInput:  delta = $delta, decimalPos = $decimalPos")
-
-        val caretPosTemp = if (revert && !input.delAction) {
-           input.caretPos
-
-        } else if (input.delAction) {
-            input.caretPos - delta
-
-        } else {
-            input.caretPos + delta
-        }
-
-        // keep caret on same side of decimal
-        val caretPos = if (caretIsDecimal) {
-            Math.max(Math.min(sFormatted.length, caretPosTemp), if (input.delAction) 0 else decimalPos+1)
-        } else {
-            Math.max(Math.min(decimalPos, caretPosTemp), 0)
-        }
-//        Timber.d("realtimeFormatInput: caretPos = $caretPos, caretPosTemp = $caretPosTemp")
-
-        return CurrencyRealtimeFormatOutput(sFormatted = sFormatted,
-                sRaw = sRaw,
-                caretPos = caretPos,
-                doNothing = false,
-                revert = revert)
-    }
 }
