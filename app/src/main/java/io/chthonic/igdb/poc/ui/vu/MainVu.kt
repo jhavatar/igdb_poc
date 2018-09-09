@@ -248,7 +248,9 @@ class MainVu(inflater: LayoutInflater,
             adapter.notifyItemRangeRemoved(newSize, oldSize - newSize)
         }
 
-        listView.scrollToPosition(0)
+        if (oldSize > 0) {
+            listView.scrollToPosition(0)
+        }
     }
 
 

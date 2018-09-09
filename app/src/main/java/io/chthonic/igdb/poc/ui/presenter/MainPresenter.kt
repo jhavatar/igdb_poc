@@ -151,7 +151,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
 
         val games = vu?.getGames() ?: listOf()
         if (forceDisplayLoading ?:
-                ((page > 1) || ((page == FIRST_PAGE) && games.isEmpty()))) {
+                ((page > FIRST_PAGE) || ((page == FIRST_PAGE) && games.isEmpty()))) {
             vu?.showLoading()
         }
 
