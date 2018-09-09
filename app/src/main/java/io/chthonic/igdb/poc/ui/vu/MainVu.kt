@@ -53,10 +53,10 @@ class MainVu(inflater: LayoutInflater,
         PublishSubject.create<Int>()
     }
 
-    private val gameSelectedPublisher: PublishSubject<Pair<IgdbGame, View>> by lazy {
-        PublishSubject.create<Pair<IgdbGame, View>>()
+    private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, View>> by lazy {
+        PublishSubject.create<Triple<IgdbGame, Int, View>>()
     }
-    val gameSelectedObservable: Observable<Pair<IgdbGame, View>>
+    val gameSelectedObservable: Observable<Triple<IgdbGame, Int, View>>
         get() = gameSelectedPublisher.hide()
 
     private val orderSelectedPublisher: PublishSubject<Order> by lazy {
@@ -253,9 +253,10 @@ class MainVu(inflater: LayoutInflater,
     }
 
 
-    fun displayGame(game: IgdbGame, sharedView: View) {
+    fun displayGame(game: IgdbGame, rank: Int, sharedView: View) {
         val intent = Intent(activity, GameActivity::class.java)
         intent.putExtra(GamePresenter.KEY_GAME, game)
+        intent.putExtra(GameActivity.KEY_RANK, rank)
 
         if (game.cover?.largeUrl != null) {
 

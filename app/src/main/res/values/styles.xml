@@ -55,6 +55,11 @@
         <item name="android:textSize">@dimen/label_medium</item>
     </style>
 
+    <style name="MetaText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/grey_dark</item>
+        <item name="android:textSize">@dimen/label_small</item>
+    </style>
+
     <style name="TitleText" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/grey_xlight</item>
         <item name="android:textSize">@dimen/label_large</item>

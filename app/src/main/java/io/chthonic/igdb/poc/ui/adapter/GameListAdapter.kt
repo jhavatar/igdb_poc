@@ -13,7 +13,7 @@ import io.reactivex.subjects.PublishSubject
 /**
  * Created by jhavatar on 9/8/2018.
  */
-class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<IgdbGame, View>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, View>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_EMPTY = 0
@@ -76,7 +76,7 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<Igd
             holder.update(game)
             RxView.clicks(holder.clickView)
                     .map {
-                        Pair(game, holder.imageView)
+                        Triple(game, position, holder.imageView)
                     }
                     .subscribeWith(gameSelectedPublisher)
 

@@ -108,8 +108,8 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
 
         rxSubs.add(vu.gameSelectedObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({event: Pair<IgdbGame, View> ->
-                    vu.displayGame(event.first, event.second)
+                .subscribe({event: Triple<IgdbGame, Int, View> ->
+                    vu.displayGame(event.first, event.second + 1, event.third)
 
                 }, {t: Throwable ->
                     Timber.e(t, "gameSelectedObservable failed")

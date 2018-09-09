@@ -14,6 +14,7 @@
 
     <dimen name="input_text_size">@dimen/label_small</dimen>
 
+    <dimen name="pad_xsmall">4dp</dimen>
     <dimen name="pad_small">6dp</dimen>
     <dimen name="pad_medium">8dp</dimen>
     <dimen name="pad_large">12dp</dimen>
@@ -33,4 +34,8 @@
     <dimen name="empty_state_vertical_bias">0.25</dimen>
 
     <dimen name="circle_image_size">56dp</dimen>
+
+    <dimen name="card_corner_radius">8dp</dimen>
+
+    <dimen name="small_image_size">16dp</dimen>
 </resources>

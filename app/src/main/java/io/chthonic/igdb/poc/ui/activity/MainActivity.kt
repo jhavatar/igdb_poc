@@ -11,7 +11,6 @@ import io.chthonic.igdb.poc.ui.presenter.MainPresenter
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.mythos.mvp.MVPDispatcher
 import io.chthonic.mythos.mvp.PresenterCacheBasicLazy
-import io.chthonic.mythos.mvp.PresenterCacheLoaderCallback
 import io.chthonic.mythos.viewmodel.PesenterCacheViewModel
 import timber.log.Timber
 
