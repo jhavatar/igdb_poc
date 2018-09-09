@@ -13,8 +13,6 @@ import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.igdb.poc.utils.NetUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.experimental.ThreadPoolDispatcher
-import kotlinx.coroutines.experimental.newSingleThreadContext
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
@@ -44,10 +42,6 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     private var canLoadMore: Boolean = true
 
     private var order: Order = Order.POPULARITY
-
-    private val clearDispatcher: ThreadPoolDispatcher by lazy {
-        newSingleThreadContext("clear")
-    }
 
     override fun onLink(vu: MainVu, inState: Bundle?, args: Bundle) {
         super.onLink(vu, inState, args)
@@ -131,13 +125,13 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     }
 
 
-    fun refreshGames(pullToRefresh: Boolean) {
+    private fun refreshGames(pullToRefresh: Boolean) {
         canLoadMore = true
         lastPage = NO_PAGE
         fetchGames(!pullToRefresh)
     }
 
-    fun fetchGames(forceDisplayLoading: Boolean? = null) {
+    private fun fetchGames(forceDisplayLoading: Boolean? = null) {
         if (!canLoadMore || loadingBusy) {
             return
         }
