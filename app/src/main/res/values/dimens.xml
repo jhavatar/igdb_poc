@@ -6,13 +6,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="content_padding">8dp</dimen>
-
     <dimen name="label_small">14sp</dimen> 
     <dimen name="label_medium">16sp</dimen> 
     <dimen name="label_large">18sp</dimen>
-
-    <dimen name="input_text_size">@dimen/label_small</dimen>
 
     <dimen name="pad_xsmall">4dp</dimen>
     <dimen name="pad_small">6dp</dimen>
@@ -25,10 +21,6 @@
     <dimen name="loading_container_dimen">104dp</dimen>
 
     <dimen name="list_item_height">88dp</dimen>
-
-    <dimen name="input_bar_height">56dp</dimen>
-
-    <dimen name="corner_radius">7dp</dimen>
 
     <dimen name="empty_state_vertical_bias">0.25</dimen>
 
