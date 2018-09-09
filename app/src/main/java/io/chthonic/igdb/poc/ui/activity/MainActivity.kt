@@ -1,18 +1,13 @@
 package io.chthonic.igdb.poc.ui.activity
 
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
-import android.view.Menu
-import android.view.MenuItem
 import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.ui.presenter.MainPresenter
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.mythos.mvp.MVPDispatcher
 import io.chthonic.mythos.mvp.PresenterCacheBasicLazy
 import io.chthonic.mythos.viewmodel.PesenterCacheViewModel
-import timber.log.Timber
 
 
 class MainActivity : MVPActivity<MainPresenter, MainVu>() {
