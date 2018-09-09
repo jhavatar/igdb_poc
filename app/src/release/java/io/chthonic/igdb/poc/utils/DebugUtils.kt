@@ -1,7 +1,6 @@
-package io.chthonic.bitcoin.calculator.utils
+package io.chthonic.igdb.poc.utils
 
 import android.app.Application
-import okhttp3.OkHttpClient
 
 /**
  * Created by jhavatar on 9/12/16.
