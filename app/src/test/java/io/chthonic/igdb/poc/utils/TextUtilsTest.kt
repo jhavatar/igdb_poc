@@ -8,7 +8,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLog
-import org.w3c.dom.Text
 import java.math.BigDecimal
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -153,11 +152,11 @@ class TextUtilsTest {
     fun testGetDateTimeString() {
         var dateTime = "13:12:20"
         var date = TextUtils.timeFormatter.parse(dateTime)
-        assertEquals(TextUtils.getDateTimeString(date.time), dateTime)
+        assertEquals(TextUtils.getDateString(date.time), dateTime)
 
         dateTime = "2001-02-03"
         date = TextUtils.dateFormatter.parse(dateTime)
-        assertEquals(TextUtils.getDateTimeString(date.time), dateTime)
+        assertEquals(TextUtils.getDateString(date.time), dateTime)
     }
 
     @Test

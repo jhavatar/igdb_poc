@@ -60,7 +60,7 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val date = game.first_release_date
         if (date != null) {
-            dateView.text = "Release: ${TextUtils.getDateTimeString(date)}"
+            dateView.text = "Release: ${TextUtils.getDateString(date)}"
             dateView.visibility = View.VISIBLE
 
         } else {

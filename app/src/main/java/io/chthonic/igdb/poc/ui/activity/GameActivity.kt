@@ -67,7 +67,7 @@ class GameActivity: BaseActivity() {
         }
 
         if (rank > 0) {
-            this.game_rank.text = UiUtils.fromHtml("<b>Ranked:</b> #$rank")
+            this.game_rank.text = TextUtils.fromHtml("<b>Ranked:</b> #$rank")
 
         } else {
             this.game_summary.visibility = View.GONE
@@ -75,7 +75,7 @@ class GameActivity: BaseActivity() {
 
         val date = game.first_release_date
         if (date != null) {
-            this.game_date.text = UiUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateTimeString(date)}")
+            this.game_date.text = TextUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateString(date)}")
 
         } else {
             this.game_date.visibility = View.GONE
