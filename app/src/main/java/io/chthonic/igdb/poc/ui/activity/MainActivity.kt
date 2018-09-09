@@ -44,44 +44,4 @@ class MainActivity : MVPActivity<MainPresenter, MainVu>() {
         this.setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
     }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        super.onPrepareOptionsMenu(menu)
-
-        // manually tint icon since xml tint does not work
-        listOf(Pair(menu.findItem(R.id.action_refresh), R.drawable.ic_refresh_black_24dp),
-                Pair(menu.findItem(R.id.action_clear),  R.drawable.ic_delete_black_24dp)).forEach{
-            val icon = ResourcesCompat.getDrawable(resources, it.second, theme)
-            icon?.setColorFilter(ResourcesCompat.getColor(resources, R.color.white, theme), PorterDuff.Mode.SRC_IN)
-            it.first.icon = icon
-        }
-
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        Timber.d("onOptionsItemSelected: id = ${item.itemId}, action_refresh = ${R.id.action_refresh}")
-        when (item.itemId) {
-            R.id.action_refresh -> {
-//                mvpDispatcher.presenter?.fetchLatestTickers(true)
-                return true
-            }
-            R.id.action_clear -> {
-//                mvpDispatcher.presenter?.clearCalculation()
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 }

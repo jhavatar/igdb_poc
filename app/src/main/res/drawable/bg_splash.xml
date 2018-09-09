@@ -9,9 +9,9 @@
     <item>
         <bitmap
             tools:ignore="AppCompatResource"
-            android:src="@drawable/tile_bitcoin"
+            android:src="@drawable/nes_boxart"
             android:tileMode="repeat"
-            android:alpha="0.5"
+            android:alpha="0.9"
             />
     </item>
 

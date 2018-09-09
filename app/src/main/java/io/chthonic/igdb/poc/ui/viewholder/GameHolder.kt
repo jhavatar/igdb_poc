@@ -46,7 +46,7 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
             Picasso.get()
                     .load(imageUrl)
                     .noFade()
-                    .placeholder(R.drawable.ic_videogame_asset_black_24dp)
+                    .placeholder(R.drawable.ic_videogame_asset_grey_24dp)
                     .into(imageView)
             imageView.visibility = View.VISIBLE
 

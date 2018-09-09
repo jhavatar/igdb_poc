@@ -34,7 +34,7 @@ class EmptyStateHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
             R.drawable.ic_signal_wifi_off_black_24dp
 
         } else if (errorMsg.isNullOrEmpty()){
-            R.drawable.ic_videogame_asset_black_24dp
+            R.drawable.ic_videogame_asset_grey_24dp
 
         } else {
             R.drawable.ic_error_black_24dp
