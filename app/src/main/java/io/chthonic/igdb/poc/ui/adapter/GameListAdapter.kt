@@ -20,6 +20,7 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<Igd
         private const val TYPE_GAME = 1
     }
 
+    // Is true if a value has been explicitly set, data or error
     var hasValidData = false
         private set
 
@@ -42,6 +43,7 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Pair<Igd
     override fun getItemViewType(position: Int): Int {
         return if (hasEmptyState) {
             TYPE_EMPTY
+
         } else {
             TYPE_GAME
         }

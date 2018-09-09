@@ -66,7 +66,5 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         } else {
             dateView.visibility = View.GONE
         }
-
-
     }
 }

@@ -21,7 +21,6 @@ class EmptyStateHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
         }
     }
 
-
     val iconView: AppCompatImageView by lazy {
        itemView.empty_icon
     }

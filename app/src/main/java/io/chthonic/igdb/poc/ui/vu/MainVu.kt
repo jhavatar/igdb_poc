@@ -4,19 +4,21 @@ import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.app.Activity
 import android.content.Intent
-import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.activity.GameActivity
 import io.chthonic.igdb.poc.ui.adapter.GameListAdapter
 import io.chthonic.igdb.poc.ui.presenter.GamePresenter
@@ -27,12 +29,6 @@ import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.vu_main.view.*
 import timber.log.Timber
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.LinearSmoothScroller
-import android.view.MenuItem
-import android.widget.ImageView
-import io.chthonic.igdb.poc.data.model.Order
 
 
 /**
@@ -50,7 +46,6 @@ class MainVu(inflater: LayoutInflater,
     private val refreshPublisher: PublishSubject<Any> by lazy {
         PublishSubject.create<Any>()
     }
-
     val refreshObservable: Observable<Any>
         get() = refreshPublisher.hide()
 
@@ -78,14 +73,6 @@ class MainVu(inflater: LayoutInflater,
         LinearLayoutManager(activity)
     }
 
-    private val appBarOnChangeListener: AppBarLayout.OnOffsetChangedListener by lazy {
-        object: AppBarLayout.OnOffsetChangedListener{
-            override fun onOffsetChanged(appBarLayout: AppBarLayout?, offset: Int) {
-                appBarExpanded = offset == 0
-            }
-        }
-    }
-
     private val navListener: BottomNavigationView.OnNavigationItemSelectedListener by lazy {
         object: BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -109,8 +96,6 @@ class MainVu(inflater: LayoutInflater,
         return R.layout.vu_main
     }
 
-    private var appBarExpanded: Boolean = true
-
     fun getGames(): List<IgdbGame> {
         return adapter.gameList
     }
@@ -131,39 +116,36 @@ class MainVu(inflater: LayoutInflater,
 
         (activity as AppCompatActivity).setSupportActionBar(rootView.toolbar)
 
-        rootView.app_bar.addOnOffsetChangedListener(appBarOnChangeListener)
-        rootView.pullToRefresh.headerView = View.inflate(activity, R.layout.layout_loading, null)
+        listView.adapter = adapter
+        listView.layoutManager = listLayoutManager
+        listView.addItemDecoration(DividerItemDecoration(listView.getContext(), listLayoutManager.getOrientation()))
+        listView.itemAnimator = SlideInUpAnimator(OvershootInterpolator(2.0f))
 
+        rootView.pullToRefresh.headerView = View.inflate(activity, R.layout.layout_loading, null)
         rootView.pullToRefresh.setPtrHandler(object: PtrHandler {
             override fun onRefreshBegin(frame: PtrFrameLayout?) {
-                Timber.d("onRefreshBegin")
+                // publish pull to refresh event
                 refreshPublisher.onNext(true)
             }
 
             override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
-                return (listLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) && appBarExpanded
+                return (listLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
             }
 
         })
 
-        listView.adapter = adapter
-        listView.layoutManager = listLayoutManager
-        listView.addItemDecoration(DividerItemDecoration(listView.getContext(), listLayoutManager.getOrientation()))
-        val anim = SlideInUpAnimator(OvershootInterpolator(2.0f))
-        listView.itemAnimator = anim //SlideInUpAnimator(OvershootInterpolator(2.0f))
-
         rootView.bottom_nav.setOnNavigationItemSelectedListener(navListener)
 
+        // start horizontal screen with more vertical space
         if (UiUtils.isHorizontal(rootView.resources)) {
             rootView.app_bar.setExpanded(false)
         }
     }
 
     override fun onDestroy() {
-        // clear mem
+        // prevent possble memory leaks
         listView.clearOnScrollListeners()
         rootView.pullToRefresh.setPtrHandler(null)
-        rootView.app_bar.removeOnOffsetChangedListener(appBarOnChangeListener)
         rootView.bottom_nav.setOnNavigationItemReselectedListener(null)
         super.onDestroy()
     }
@@ -190,7 +172,7 @@ class MainVu(inflater: LayoutInflater,
     }
 
     fun showError(errorMsg: String) {
-        rootView.pullToRefresh.refreshComplete()
+        rootView.pullToRefresh.refreshComplete() // make sure pull-to-refresh display is stopped
         if ((adapter.errorMessage != errorMsg) || !adapter.hasValidData) {
             adapter.errorMessage = errorMsg
             adapter.notifyDataSetChanged()
@@ -225,7 +207,7 @@ class MainVu(inflater: LayoutInflater,
         Timber.d("updateGames: hadEmptyState = $hadEmptyState, oldSize = $oldSize, newSize = $newSize")
 
         if (!hadEmptyState && (oldSize == newSize) && (nuGames == getGames())) {
-            Timber.d("updateGames: return")
+            // same data
             return
         }
         adapter.gameList = nuGames
@@ -274,7 +256,10 @@ class MainVu(inflater: LayoutInflater,
     fun displayGame(game: IgdbGame, sharedView: View) {
         val intent = Intent(activity, GameActivity::class.java)
         intent.putExtra(GamePresenter.KEY_GAME, game)
+
         if (game.cover?.largeUrl != null) {
+
+            // inform new activity of shared view for animation
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView as View, "cover")
             activity.startActivity(intent, options.toBundle())
 

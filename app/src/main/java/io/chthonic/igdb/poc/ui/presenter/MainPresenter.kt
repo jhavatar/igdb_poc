@@ -50,28 +50,32 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
 
     override fun onLink(vu: MainVu, inState: Bundle?, args: Bundle) {
         super.onLink(vu, inState, args)
-        Timber.d("onLink")
+
+        // read saved state if exists
         if (inState?.containsKey(KEY_ORDER) == true) {
             order = Order.fromId(inState.getInt(KEY_ORDER), Order.POPULARITY)
         }
+
+        // initialize state and make sure it represents ui
         loadingBusy = false
-        subscribeVuListeners(vu)
-        Timber.d("listeners subscribe completed")
-
-        vu.updateOrderSelection(order)
-
         if (vu.getGames().isEmpty()) {
             lastPage = NO_PAGE
             canLoadMore = true
         }
 
+        // subscribe event listeners
+        subscribeVuListeners(vu)
+
+        // update ui to represent state
+        vu.updateOrderSelection(order)
+
+        // auto fetch new games if required
         if (lastPage == NO_PAGE) {
             fetchGames()
         }
     }
 
     override fun onUnlink() {
-        Timber.d("onUnlink")
         vu?.hideLoading(true)
         super.onUnlink()
     }
@@ -92,7 +96,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
                     Timber.e(t, "refreshObservable failed")
                 }))
 
-        rxSubs.add(vu.setScrollListener() // articles per page not guaranteed
+        rxSubs.add(vu.setScrollListener()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({firstVisibleItemPosition: Int ->
                     Timber.d("setScrollListener: firstVisibleItemPosition = $firstVisibleItemPosition, lastPage = $lastPage, canLoadMore = $canLoadMore, loadingBusy = $loadingBusy")
@@ -138,6 +142,8 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
         }
 
         vu?.let{
+
+            // if offline, do not wait for call to timeout
             if (!NetUtils.isOnline(it.activity)) {
                 it.showOffline()
                 return
@@ -193,9 +199,7 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
         }
     }
 
-
     private fun getNextPage(): Int {
         return Math.max(lastPage + 1, FIRST_PAGE)
     }
-
 }
