@@ -11,6 +11,7 @@ import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.igdb.poc.utils.NetUtils
+import io.chthonic.igdb.poc.utils.PagingUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -163,8 +164,7 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
         Timber.d("fetchGames: page = $page, lastPage = $lastPage, loadingBusy = $loadingBusy, canLoadMore = $canLoadMore")
 
         val games = vu?.getGames() ?: listOf()
-        if (forceDisplayLoading ?:
-                ((page > FIRST_PAGE) || ((page == FIRST_PAGE) && games.isEmpty()))) {
+        if (PagingUtils.shouldShowLoading(forceDisplayLoading, page, FIRST_PAGE, games.isEmpty())) {
             vu?.showLoading()
         }
 
@@ -194,7 +194,7 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
         val page = getNextPage()
         vu?.let {
             lastPage = page
-            canLoadMore = (page < LAST_PAGE) && ((page >= FIRST_PAGE) && (gameList.size >= IgdbService.PAGE_SIZE))
+            canLoadMore = PagingUtils.canLoadMorePages(page, FIRST_PAGE, LAST_PAGE, IgdbService.PAGE_SIZE, gameList.size)
 
             if (page == FIRST_PAGE) {
                 it.updateGames(gameList)
