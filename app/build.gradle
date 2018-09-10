@@ -131,8 +131,8 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
     // dev utils
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
     implementation 'com.github.ajalt:timberkt:1.4.0'
 
     // testing

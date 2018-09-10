@@ -49,6 +49,18 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 >
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/app_version"
+                    tools:text="v2.0"
+                    android:layout_marginEnd="@dimen/pad_medium"
+                    android:layout_gravity="center_vertical|end"
+                    android:textColor="@color/white50"
+                    android:textSize="@dimen/label_tiny"
+                    android:visibility="gone"
+                    />
+
             </android.support.v7.widget.Toolbar>
 
 
@@ -69,6 +81,8 @@
                 android:id="@+id/list_tickers"
                 />
         </in.srain.cube.views.ptr.PtrFrameLayout>
+
+
 
     </android.support.design.widget.CoordinatorLayout>
 

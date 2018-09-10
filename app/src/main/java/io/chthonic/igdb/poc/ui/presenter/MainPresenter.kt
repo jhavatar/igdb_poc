@@ -51,18 +51,19 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
             order = Order.fromId(inState.getInt(KEY_ORDER), order)
         }
 
-        // initialize state and make sure it represents ui
+        // initialize game page state to match current ui
         loadingBusy = false
         if (vu.getGames().isEmpty()) {
             lastPage = NO_PAGE
             canLoadMore = true
         }
 
-        // subscribe event listeners
-        subscribeVuListeners(vu)
-
-        // update ui to represent state
+        // initial ui update
         vu.updateOrderSelection(order)
+        vu.showAppVersion("v${io.chthonic.igdb.poc.BuildConfig.VERSION_NAME} (${io.chthonic.igdb.poc.BuildConfig.VERSION_CODE})")
+
+        // subscribe ui event listeners
+        subscribeVuListeners(vu)
 
         // auto fetch new games if required
         if (lastPage == NO_PAGE) {
@@ -77,10 +78,14 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     }
 
     override fun onSaveState(outState: Bundle) {
+        // persist order state, e.g. to keep across rotation
         outState.putInt(KEY_ORDER, order.id)
         super.onSaveState(outState)
     }
 
+    /**
+     * subscribe to (observe) Vu's events until unsubscribed in onUnlink
+     */
     private fun subscribeVuListeners(vu: MainVu) {
         rxSubs.add(vu.refreshObservable
                 .observeOn(AndroidSchedulers.mainThread())
@@ -126,12 +131,19 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
     }
 
 
+    /**
+     * Refresh list by discarding all results and reloading from the first page
+     */
     private fun refreshGames(pullToRefresh: Boolean) {
         canLoadMore = true
         lastPage = NO_PAGE
         fetchGames(!pullToRefresh)
     }
 
+    /**
+     * Fetch the next page of games
+     * @param forceDisplayLoading force if loading should be displayed regardless of logic
+     */
     private fun fetchGames(forceDisplayLoading: Boolean? = null) {
         if (!canLoadMore || loadingBusy) {
             return
@@ -165,8 +177,8 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({gameList ->
-                    Timber.d("fetchGames: size = ${gameList.size}")
-                    onGamesFetched(gameList)
+                    Timber.d("fetchGames success: size = ${gameList.size}")
+                    onGamesFetchSuccess(gameList)
                     loadingBusy = false
                     vu?.hideLoading()
 
@@ -178,11 +190,9 @@ class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<Main
                 }))
     }
 
-    private fun onGamesFetched(gameList: List<IgdbGame>) {
+    private fun onGamesFetchSuccess(gameList: List<IgdbGame>) {
         val page = getNextPage()
-        Timber.d("onGamesFetched: size = ${gameList.size}, page = $page")
         vu?.let {
-
             lastPage = page
             canLoadMore = (page < LAST_PAGE) && ((page >= FIRST_PAGE) && (gameList.size >= IgdbService.PAGE_SIZE))
 

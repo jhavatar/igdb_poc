@@ -268,11 +268,19 @@ class MainVu(inflater: LayoutInflater,
         if ((game.cover?.largeUrl != null) && (sharedView != null)) {
 
             // inform new activity of shared view animation
+            // NB, note than andoid SDK leaks memory on shared view animation
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView, activity.getString(R.string.shared_view_transition_name))
             activity.startActivity(intent, options.toBundle())
 
         } else {
             activity.startActivity(intent)
+        }
+    }
+
+    fun showAppVersion(version: String) {
+        if (rootView.app_version.visibility != View.VISIBLE) {
+            rootView.app_version.text = version
+            rootView.app_version.visibility = View.VISIBLE
         }
     }
 }
