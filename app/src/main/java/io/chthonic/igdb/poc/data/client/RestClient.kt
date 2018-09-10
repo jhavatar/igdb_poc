@@ -1,6 +1,5 @@
 package io.chthonic.igdb.poc.data.client
 
-import io.chthonic.igdb.poc.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -17,7 +16,7 @@ class RestClient(baseUrl: String, defaultHeaderMap: Map<String, String> = mapOf(
 
     val restAdapter: Retrofit by lazy {
         val logging = HttpLoggingInterceptor()
-        logging.setLevel(if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
+        logging.setLevel(if (io.chthonic.igdb.poc.BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
 
         val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(logging)
