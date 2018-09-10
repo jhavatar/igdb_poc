@@ -10,6 +10,7 @@ abstract class BasePresenter<V>: io.chthonic.mythos.mvp.Presenter<V>() where V :
     }
 
     override fun onUnlink() {
+        // clear subscriptions to prevent memory leaks
         rxSubs.clear()
         super.onUnlink()
     }

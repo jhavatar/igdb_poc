@@ -39,7 +39,7 @@ class GameActivity: BaseActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true);
         this.toolbar_collapse.title = game.name
 
-        // dynamically resize image display to find best fit for screen
+        // dynamically resize image view to find best fit for screen
         val imageView = this.game_image
         val height = IgdbImage.WIDTH_LARGE
         val width = IgdbImage.HEIGHT_LARGE

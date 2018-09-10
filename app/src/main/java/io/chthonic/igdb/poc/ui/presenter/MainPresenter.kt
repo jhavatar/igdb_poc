@@ -20,14 +20,14 @@ import java.lang.ref.WeakReference
 /**
  * Created by jhavatar on 3/28/2018.
  */
-class MainPresenter(private val kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
+class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
 
     companion object {
         const val NO_PAGE = -1
         const val FIRST_PAGE = 0
         const val LAST_PAGE = 4
 
-        private val KEY_ORDER = "key_order"
+        private const val KEY_ORDER = "key_order"
     }
 
     private val igdbService: IgdbService by kodein.lazy.instance<IgdbService>()

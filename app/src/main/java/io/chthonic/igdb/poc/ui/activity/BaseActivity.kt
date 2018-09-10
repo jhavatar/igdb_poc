@@ -12,6 +12,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected val rxSubs : CompositeDisposable = CompositeDisposable()
 
     override fun onPause() {
+        // clear subscriptions to prevent memory leaks
         rxSubs.clear()
         super.onPause()
     }

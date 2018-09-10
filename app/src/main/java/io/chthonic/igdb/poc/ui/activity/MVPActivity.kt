@@ -7,14 +7,11 @@ import io.chthonic.mythos.mvp.Presenter
 import io.chthonic.mythos.mvp.Vu
 
 /**
- * Created by jhavatar on 3/6/17.
- */
-/**
  * Created by jhavatar on 3/5/2016.
  *
  * Implement a MVP pattern using an Activity.
- * MVPDispatcher requires PresenterCache implement interface LoaderManager.LoaderCallbacks, e.g. provided PresenterCacheLoaderCallback
- * Presenter is linked from onStart() to onStop() and destroyed when supportLoaderManager calls onLoaderReset().
+ * MVPDispatcher requires PresenterCache implement interface LoaderManager.LoaderCallbacks, e.g. provided PesenterCacheViewModel
+ * Presenter is linked from onResume() to onPause() and destroyed when PresenterCache calls destroyCached().
  * Vu is created in onCreate() and destroyed in onDestroy().
  * @param P type of Presenter.
  * @param V type of Vu.
