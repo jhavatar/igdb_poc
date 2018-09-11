@@ -1,10 +1,11 @@
 package io.chthonic.igdb.poc.utils
 
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.widget.ImageViewCompat
 import android.view.View
 import android.widget.ImageView
 import timber.log.Timber
@@ -16,7 +17,8 @@ import timber.log.Timber
 object UiUtils {
 
     fun tintImageView(imageView: ImageView, activity: Activity, colorRef: Int) {
-        DrawableCompat.setTint(imageView.getDrawable(), ContextCompat.getColor(activity.getApplicationContext(), colorRef))
+        ImageViewCompat.setImageTintList(imageView,
+                ColorStateList.valueOf(ContextCompat.getColor(activity.getApplicationContext(), colorRef)))
     }
 
     fun isHorizontal(res: Resources): Boolean {
