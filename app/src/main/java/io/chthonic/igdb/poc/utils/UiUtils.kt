@@ -18,7 +18,7 @@ object UiUtils {
 
     fun tintImageView(imageView: ImageView, activity: Activity, colorRef: Int) {
         ImageViewCompat.setImageTintList(imageView,
-                ColorStateList.valueOf(ContextCompat.getColor(activity.getApplicationContext(), colorRef)))
+                ColorStateList.valueOf(ContextCompat.getColor(activity.applicationContext, colorRef)))
     }
 
     fun isHorizontal(res: Resources): Boolean {
