@@ -22,6 +22,7 @@ class GameActivity: BaseActivity() {
         const val KEY_GAME = "key_game"
         const val KEY_RANK = "key_rank"
         const val KEY_ORDER = "key_order"
+        const val KEY_IMAGE = "key_image"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,25 +34,25 @@ class GameActivity: BaseActivity() {
         val game = intent.getParcelableExtra<IgdbGame>(KEY_GAME)
         val rank = intent.getIntExtra(KEY_RANK, -1)
         val order = Order.fromId(intent.getIntExtra(KEY_ORDER, Order.POPULARITY.id), Order.POPULARITY)
+        val image = if (intent.hasExtra(KEY_IMAGE)) intent.getParcelableExtra<IgdbImage>(KEY_IMAGE) else null
 
         setSupportActionBar(this.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         this.toolbar_collapse.title = game.name
 
         // dynamically resize image view to find best fit for screen
         val imageView = this.game_image
-        val height = IgdbImage.WIDTH_LARGE
-        val width = IgdbImage.HEIGHT_LARGE
+        val height = IgdbImage.WIDTH_COVER_BIG
+        val width = IgdbImage.HEIGHT_COVER_BIG
         val params = imageView.layoutParams
         params.height = UiUtils.getMaxHeightForMaxWidth(this, width, height, 0.4)
 
-        val largeUrl = game.cover?.largeUrl
-        if (largeUrl != null) {
+        if (image != null) {
 
             // Shared view animation should work fine since Picasso should have cached the image when displaying on the list
             Picasso.get()
-                    .load(largeUrl)
+                    .load(image.coverBigUrl)
                     .into(imageView)
 
         } else {
@@ -75,7 +76,7 @@ class GameActivity: BaseActivity() {
 
         val date = game.first_release_date
         if (date != null) {
-            this.game_date.text = TextUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateString(date)}")
+            this.game_date.text = TextUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateStringFromUnixTime(date)}")
 
         } else {
             this.game_date.visibility = View.GONE

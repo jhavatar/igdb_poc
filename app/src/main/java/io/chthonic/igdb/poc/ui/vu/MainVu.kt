@@ -3,6 +3,7 @@ package io.chthonic.igdb.poc.ui.vu
 import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityOptionsCompat
@@ -18,9 +19,11 @@ import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.activity.GameActivity
 import io.chthonic.igdb.poc.ui.adapter.GameListAdapter
+import io.chthonic.igdb.poc.ui.model.GameClickResult
 import io.chthonic.igdb.poc.ui.view.InfiniteLinearScrollListener
 import io.chthonic.igdb.poc.utils.UiUtils
 import io.reactivex.Observable
@@ -51,10 +54,10 @@ class MainVu(inflater: LayoutInflater,
     }
 
     // Note, WeakReference to prevent memory leak
-    private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, WeakReference<View>>> by lazy {
-        PublishSubject.create<Triple<IgdbGame, Int, WeakReference<View>>>()
+    private val gameSelectedPublisher: PublishSubject<GameClickResult> by lazy {
+        PublishSubject.create<GameClickResult>()
     }
-    val gameSelectedObservable: Observable<Triple<IgdbGame, Int, WeakReference<View>>>
+    val gameSelectedObservable: Observable<GameClickResult>
         get() = gameSelectedPublisher.hide()
 
     private val orderSelectedPublisher: PublishSubject<Order> by lazy {
@@ -68,7 +71,7 @@ class MainVu(inflater: LayoutInflater,
     }
 
     private val listLayoutManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(activity)
+        LinearLayoutManager(activity as Context)
     }
 
     private val navListener: BottomNavigationView.OnNavigationItemSelectedListener by lazy {
@@ -182,11 +185,12 @@ class MainVu(inflater: LayoutInflater,
         }
     }
 
-    fun appendGames(nuGames: List<IgdbGame>) {
+    fun appendGames(nuGames: List<IgdbGame>, coverMap: Map<Long, IgdbImage>) {
         val hadEmptyState = adapter.hasEmptyState
         val games = adapter.gameList.toMutableList()
         val appendStart = games.size
         games.addAll(nuGames)
+        adapter.coverMap.putAll(coverMap)
         adapter.gameList = games
 
         if (hadEmptyState){
@@ -203,7 +207,7 @@ class MainVu(inflater: LayoutInflater,
         }
     }
 
-    fun updateGames(nuGames: List<IgdbGame>) {
+    fun updateGames(nuGames: List<IgdbGame>, coverMap: Map<Long, IgdbImage>) {
         val hadEmptyState = adapter.hasEmptyState
         val oldSize = adapter.gameList.size
         val newSize = nuGames.size
@@ -213,8 +217,9 @@ class MainVu(inflater: LayoutInflater,
             // same data
             return
         }
+        adapter.coverMap.clear()
+        adapter.coverMap.putAll(coverMap)
         adapter.gameList = nuGames
-
 
         if ((oldSize == 0) && (newSize == 0)) {
             adapter.notifyItemRangeChanged(0, adapter.itemCount)
@@ -258,14 +263,15 @@ class MainVu(inflater: LayoutInflater,
     }
 
 
-    fun displayGame(game: IgdbGame, rank: Int, order:Order, sharedViewRef: WeakReference<View>) {
+    fun displayGame(game: IgdbGame, image: IgdbImage?, rank: Int, order:Order, sharedViewRef: WeakReference<View>) {
         val intent = Intent(activity, GameActivity::class.java)
         intent.putExtra(GameActivity.KEY_GAME, game)
         intent.putExtra(GameActivity.KEY_RANK, rank)
         intent.putExtra(GameActivity.KEY_ORDER, order.id)
 
         val sharedView = sharedViewRef.get()
-        if ((game.cover?.largeUrl != null) && (sharedView != null)) {
+        if ((image != null) && (sharedView != null)) {
+            intent.putExtra(GameActivity.KEY_IMAGE, image)
 
             // inform new activity of shared view animation
             // NB, note than andoid SDK leaks memory on shared view animation

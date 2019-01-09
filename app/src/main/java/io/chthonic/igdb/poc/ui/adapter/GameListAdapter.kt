@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.RxView
 import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.IgdbImage
+import io.chthonic.igdb.poc.ui.model.GameClickResult
 import io.chthonic.igdb.poc.ui.viewholder.EmptyStateHolder
 import io.chthonic.igdb.poc.ui.viewholder.GameHolder
 import io.reactivex.subjects.PublishSubject
@@ -14,7 +16,7 @@ import java.lang.ref.WeakReference
 /**
  * Created by jhavatar on 9/8/2018.
  */
-class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, WeakReference<View>>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class GameListAdapter(private val gameSelectedPublisher: PublishSubject<GameClickResult>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val TYPE_EMPTY = 0
@@ -34,6 +36,8 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<I
             errorMessage = null
             hasValidData = true
         }
+
+    val coverMap: MutableMap<Long, IgdbImage> = mutableMapOf()
 
     var errorMessage: String? = null
         set(value) {
@@ -74,10 +78,12 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<I
 
         } else if (holder is GameHolder) {
             val game = gameList[position]
-            holder.update(game)
+            val image = coverMap.get(game.cover)
+            //holder.update(game, if (game.cover != null) igdbService.fetchCoverImages(listOf(game.cover)) else null)
+            holder.update(game, image)
             RxView.clicks(holder.clickView)
                     .map {
-                        Triple(game, position, WeakReference<View>(holder.imageView))
+                        GameClickResult(game, position, image, WeakReference<View>(holder.imageView))
                     }
                     .subscribeWith(gameSelectedPublisher)
 

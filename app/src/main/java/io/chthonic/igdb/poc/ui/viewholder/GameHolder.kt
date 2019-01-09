@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import io.chthonic.igdb.poc.R
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.utils.TextUtils
 import kotlinx.android.synthetic.main.holder_game.view.*
 
@@ -38,20 +39,18 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         itemView.game_date
     }
 
-    fun update(game: IgdbGame) {
+    fun update(game: IgdbGame, coverImage: IgdbImage?) {
         itemView.game_name.text = game.name
 
-        val imageUrl = game.cover?.largeUrl//thumbnailUrl
-        if (imageUrl != null) {
+        if (coverImage != null) {
             Picasso.get()
-                    .load(imageUrl)
+                    .load(coverImage.coverBigUrl)
                     .noFade()
                     .placeholder(R.drawable.ic_videogame_asset_grey_24dp)
                     .into(imageView)
             imageView.visibility = View.VISIBLE
 
         } else {
-            imageView.setImageResource(0)
             imageView.visibility = View.INVISIBLE
         }
 
@@ -60,7 +59,7 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val date = game.first_release_date
         if (date != null) {
-            dateView.text = "Release: ${TextUtils.getDateString(date)}"
+            dateView.text = "Release: ${TextUtils.getDateStringFromUnixTime(date)}"
             dateView.visibility = View.VISIBLE
 
         } else {

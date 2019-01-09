@@ -17,6 +17,6 @@ fun depInject(app: Application): Kodein {
         bind<Application>() with instance(app)
         bind<Context>() with instance(app.applicationContext)
         bind<Resources>() with instance(app.applicationContext.resources)
-        bind<IgdbService>() with singleton{ IgdbService() }
+        bind<IgdbService>() with singleton{ IgdbService(instance()) }
     }
 }

@@ -14,8 +14,8 @@ object TextUtils {
         SimpleDateFormat("MMM, yyyy")
     }
 
-    fun getDateString(time: Long): String {
-        val date = Date(time)
+    fun getDateStringFromUnixTime(timeInSeconds: Long): String {
+        val date = Date(timeInSeconds * 1000)
         return dateFormatter.format(date)
     }
 

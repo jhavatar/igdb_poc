@@ -1,12 +1,9 @@
 package io.chthonic.igdb.poc.utils
 
-import io.chthonic.igdb.poc.BuildConfig
-import io.chthonic.igdb.poc.data.model.IgdbGame
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLog
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

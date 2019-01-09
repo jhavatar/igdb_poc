@@ -1,21 +1,21 @@
 package io.chthonic.igdb.poc.ui.presenter
 
 import android.os.Bundle
-import android.view.View
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.lazy
 import io.chthonic.igdb.poc.App
 import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.data.model.Order
+import io.chthonic.igdb.poc.ui.model.GameClickResult
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.igdb.poc.utils.NetUtils
 import io.chthonic.igdb.poc.utils.PagingUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
 
 /**
@@ -110,8 +110,8 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
 
         rxSubs.add(vu.gameSelectedObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({event: Triple<IgdbGame, Int, WeakReference<View>> ->
-                    vu.displayGame(event.first, event.second + 1, order, event.third)
+                .subscribe({event: GameClickResult ->
+                    vu.displayGame(event.game, event.image, event.position + 1, order, event.imageView)
 
                 }, {t: Throwable ->
                     Timber.e(t, "gameSelectedObservable failed")
@@ -123,6 +123,7 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
                     Timber.d("orderSelectedObservable: nuOrder = $nuOrder, order = $order")
                     if (nuOrder != order) {
                         order = nuOrder
+//                        vu?.updateGames(listOf<IgdbGame>())
                         refreshGames(false)
                     }
 
@@ -174,11 +175,15 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
             Order.CRITIC_REVIEW -> igdbService.fetchHighestCriticRatedGames(page)
         }
         rxSubs.add(query
+                .flatMap{gameList: List<IgdbGame> ->
+                    igdbService.fetchCoverImagesOptimized(gameList).map{ Pair(gameList, it) }
+                }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({gameList ->
+                .subscribe({gamePair ->
+                    val (gameList, coverMap) = gamePair
                     Timber.d("fetchGames success: size = ${gameList.size}")
-                    onGamesFetchSuccess(gameList)
+                    onGamesFetchSuccess(gameList, coverMap)
                     loadingBusy = false
                     vu?.hideLoading()
 
@@ -190,17 +195,17 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
                 }))
     }
 
-    private fun onGamesFetchSuccess(gameList: List<IgdbGame>) {
+    private fun onGamesFetchSuccess(gameList: List<IgdbGame>, coverMap: Map<Long, IgdbImage>) {
         val page = getNextPage()
         vu?.let {
             lastPage = page
             canLoadMore = PagingUtils.canLoadMorePages(page, FIRST_PAGE, LAST_PAGE, IgdbService.PAGE_SIZE, gameList.size)
 
             if (page == FIRST_PAGE) {
-                it.updateGames(gameList)
+                it.updateGames(gameList, coverMap)
 
             } else {
-                it.appendGames(gameList)
+                it.appendGames(gameList, coverMap)
             }
         }
     }

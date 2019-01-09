@@ -1,6 +1,5 @@
 package io.chthonic.igdb.poc.data.model
 
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
@@ -8,28 +7,20 @@ import kotlinx.android.parcel.Parcelize
  * Created by jhavatar on 9/7/2018.
  */
 @Parcelize
-data class IgdbImage(val cloudinary_id: String,
+data class IgdbImage(val id: Long,
+                     val image_id: String,
                      val url: String? = null,
                      val width: Int? = null,
-                     val height: Int? = null): Parcelable {
+                     val height: Int? = null,
+                     val animated: Boolean = false): Parcelable {
 
     companion object {
-        const val WIDTH_LARGE = 227
-        const val HEIGHT_LARGE = 320
+        // from https://api-docs.igdb.com/#images
+        const val WIDTH_COVER_BIG = 264
+        const val HEIGHT_COVER_BIG = 374
     }
 
-    val thumbnailUrl: String?
-        get() {
-            return url?.let {
-                 Uri.parse(it)
-                        .buildUpon()
-                        .scheme("http")
-                        .build()
-                        .toString()
-            }
-        }
-
-    val largeUrl: String?
+    val coverBigUrl: String?
         get() {
             return url?.let {
                 genUrl("cover_big")
@@ -37,6 +28,6 @@ data class IgdbImage(val cloudinary_id: String,
         }
 
     private fun genUrl(size: String): String {
-       return  "http://images.igdb.com/igdb/image/upload/t_$size/$cloudinary_id.jpg"
+       return  "https://images.igdb.com/igdb/image/upload/t_$size/$image_id.jpg"
     }
 }

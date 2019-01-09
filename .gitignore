@@ -65,3 +65,7 @@ fastlane/readme.md
 
 #fabric
 fabric.properties
+
+#analytics
+app/session_analytics_to_send
+app/session_analytics.*
