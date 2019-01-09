@@ -10,6 +10,7 @@ import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.data.model.Order
+import io.chthonic.igdb.poc.ui.model.GameClickResult
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.igdb.poc.utils.NetUtils
 import io.chthonic.igdb.poc.utils.PagingUtils
@@ -111,8 +112,8 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
 
         rxSubs.add(vu.gameSelectedObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({event: Triple<IgdbGame, Int, WeakReference<View>> ->
-                    vu.displayGame(event.first, event.second + 1, order, event.third)
+                .subscribe({event: GameClickResult ->
+                    vu.displayGame(event.game, event.image, event.position + 1, order, event.imageView)
 
                 }, {t: Throwable ->
                     Timber.e(t, "gameSelectedObservable failed")

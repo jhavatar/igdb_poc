@@ -26,6 +26,7 @@ import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.activity.GameActivity
 import io.chthonic.igdb.poc.ui.adapter.GameListAdapter
+import io.chthonic.igdb.poc.ui.model.GameClickResult
 import io.chthonic.igdb.poc.ui.view.InfiniteLinearScrollListener
 import io.chthonic.igdb.poc.utils.UiUtils
 import io.reactivex.Observable
@@ -56,10 +57,10 @@ class MainVu(inflater: LayoutInflater,
     }
 
     // Note, WeakReference to prevent memory leak
-    private val gameSelectedPublisher: PublishSubject<Triple<IgdbGame, Int, WeakReference<View>>> by lazy {
-        PublishSubject.create<Triple<IgdbGame, Int, WeakReference<View>>>()
+    private val gameSelectedPublisher: PublishSubject<GameClickResult> by lazy {
+        PublishSubject.create<GameClickResult>()
     }
-    val gameSelectedObservable: Observable<Triple<IgdbGame, Int, WeakReference<View>>>
+    val gameSelectedObservable: Observable<GameClickResult>
         get() = gameSelectedPublisher.hide()
 
     private val orderSelectedPublisher: PublishSubject<Order> by lazy {
@@ -265,23 +266,24 @@ class MainVu(inflater: LayoutInflater,
     }
 
 
-    fun displayGame(game: IgdbGame, rank: Int, order:Order, sharedViewRef: WeakReference<View>) {
+    fun displayGame(game: IgdbGame, image: IgdbImage?, rank: Int, order:Order, sharedViewRef: WeakReference<View>) {
         val intent = Intent(activity, GameActivity::class.java)
         intent.putExtra(GameActivity.KEY_GAME, game)
         intent.putExtra(GameActivity.KEY_RANK, rank)
         intent.putExtra(GameActivity.KEY_ORDER, order.id)
 
         val sharedView = sharedViewRef.get()
-//        if ((game.coverBigUrl != null) && (sharedView != null)) {
-//
-//            // inform new activity of shared view animation
-//            // NB, note than andoid SDK leaks memory on shared view animation
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView, activity.getString(R.string.shared_view_transition_name))
-//            activity.startActivity(intent, options.toBundle())
-//
-//        } else {
+        if ((image?.largeUrl != null) && (sharedView != null)) {
+            intent.putExtra(GameActivity.KEY_IMAGE, image)
+
+            // inform new activity of shared view animation
+            // NB, note than andoid SDK leaks memory on shared view animation
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedView, activity.getString(R.string.shared_view_transition_name))
+            activity.startActivity(intent, options.toBundle())
+
+        } else {
             activity.startActivity(intent)
-//        }
+        }
     }
 
     fun showAppVersion(version: String) {

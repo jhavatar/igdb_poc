@@ -13,7 +13,7 @@ class IgdbApicalypseMapping(private val igdbApi: IgdbApi) {
 
     companion object {
         private const val PARAM_REQUIRED_GAME_FIELDS = "slug,name,summary,popularity,rating,aggregated_rating,total_rating,cover,first_release_date"
-        private const val PARAM_REQUIRED_IMAGE_FIELDS = "*"//id,alpha_channel,animated,height,image_id,url,width"
+        private const val PARAM_REQUIRED_IMAGE_FIELDS = "*"
     }
 
     fun getMostPopularGames(offset: Int = 0, limit: Int = 10): Single<List<IgdbGame>> {
@@ -49,7 +49,7 @@ class IgdbApicalypseMapping(private val igdbApi: IgdbApi) {
 
     fun getCoverImages(idList: List<Long>): Single<List<IgdbImage>> {
         // NB, limit is required since there is a default value that may be smaller than requested size
-        val body = """fields *;
+        val body = """fields $PARAM_REQUIRED_IMAGE_FIELDS;
             where id = (${idList.sorted().joinToString(separator = ",")});
             offset 0;
             limit ${idList.size};""".trimIndent().trimStart()
