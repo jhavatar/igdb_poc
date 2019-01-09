@@ -15,5 +15,5 @@ data class IgdbGame(val id: Long,
                     val rating: Double? = null,
                     val aggregated_rating: Double? = null,
                     val total_rating: Double? = null,
-                    val first_release_date: Long? = null,
+                    val first_release_date: Long? = null, // Unix time: seconds since epoch
                     val cover: Long? = null): Parcelable

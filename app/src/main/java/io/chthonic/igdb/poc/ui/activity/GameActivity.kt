@@ -76,7 +76,7 @@ class GameActivity: BaseActivity() {
 
         val date = game.first_release_date
         if (date != null) {
-            this.game_date.text = TextUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateString(date)}")
+            this.game_date.text = TextUtils.fromHtml("<b>Release:</b> ${TextUtils.getDateStringFromUnixTime(date)}")
 
         } else {
             this.game_date.visibility = View.GONE
