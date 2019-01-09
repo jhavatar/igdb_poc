@@ -22,6 +22,7 @@ class GameActivity: BaseActivity() {
         const val KEY_GAME = "key_game"
         const val KEY_RANK = "key_rank"
         const val KEY_ORDER = "key_order"
+        const val KEY_IMAGE = "key_image"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class GameActivity: BaseActivity() {
         val game = intent.getParcelableExtra<IgdbGame>(KEY_GAME)
         val rank = intent.getIntExtra(KEY_RANK, -1)
         val order = Order.fromId(intent.getIntExtra(KEY_ORDER, Order.POPULARITY.id), Order.POPULARITY)
+        val image = if (intent.hasExtra(KEY_IMAGE)) intent.getParcelableExtra<IgdbImage>(KEY_IMAGE) else null
 
         setSupportActionBar(this.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
@@ -46,12 +48,11 @@ class GameActivity: BaseActivity() {
         val params = imageView.layoutParams
         params.height = UiUtils.getMaxHeightForMaxWidth(this, width, height, 0.4)
 
-        val largeUrl = game.cover?.largeUrl
-        if (largeUrl != null) {
+        if (image != null) {
 
             // Shared view animation should work fine since Picasso should have cached the image when displaying on the list
             Picasso.get()
-                    .load(largeUrl)
+                    .load(image.largeUrl)
                     .into(imageView)
 
         } else {

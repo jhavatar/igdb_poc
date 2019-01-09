@@ -3,9 +3,14 @@ package io.chthonic.igdb.poc.ui.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.github.salomonbrys.kodein.instance
+import com.github.salomonbrys.kodein.lazy
 import com.jakewharton.rxbinding2.view.RxView
+import io.chthonic.igdb.poc.App
 import io.chthonic.igdb.poc.R
+import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
+import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.ui.viewholder.EmptyStateHolder
 import io.chthonic.igdb.poc.ui.viewholder.GameHolder
 import io.reactivex.subjects.PublishSubject
@@ -21,6 +26,8 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<I
         private const val TYPE_GAME = 1
     }
 
+    private val igdbService: IgdbService by App.kodein.lazy.instance<IgdbService>()
+
     // Is true if a value has been explicitly set, be it data or error
     var hasValidData = false
         private set
@@ -34,6 +41,8 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<I
             errorMessage = null
             hasValidData = true
         }
+
+    val coverMap: MutableMap<Long, IgdbImage> = mutableMapOf()
 
     var errorMessage: String? = null
         set(value) {
@@ -74,7 +83,8 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<Triple<I
 
         } else if (holder is GameHolder) {
             val game = gameList[position]
-            holder.update(game)
+            //holder.update(game, if (game.cover != null) igdbService.fetchCoverImages(listOf(game.cover)) else null)
+            holder.update(game, coverMap.get(game.cover))
             RxView.clicks(holder.clickView)
                     .map {
                         Triple(game, position, WeakReference<View>(holder.imageView))

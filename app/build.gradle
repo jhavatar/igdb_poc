@@ -5,7 +5,6 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "io.chthonic.igdb.poc"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -100,13 +99,13 @@ dependencies {
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
 
     // dependency injection
     implementation 'com.github.salomonbrys.kodein:kodein:4.1.0'
 
     // rxjava2
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
 
     // json
@@ -130,6 +129,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
+    implementation 'com.koushikdutta.ion:ion:2.+'
 
     // dev utils
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
