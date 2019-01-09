@@ -37,8 +37,8 @@ class GameActivity: BaseActivity() {
         val image = if (intent.hasExtra(KEY_IMAGE)) intent.getParcelableExtra<IgdbImage>(KEY_IMAGE) else null
 
         setSupportActionBar(this.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         this.toolbar_collapse.title = game.name
 
         // dynamically resize image view to find best fit for screen

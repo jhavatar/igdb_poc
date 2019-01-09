@@ -1,7 +1,6 @@
 package io.chthonic.igdb.poc.ui.presenter
 
 import android.os.Bundle
-import android.view.View
 import com.github.salomonbrys.kodein.Kodein
 import com.github.salomonbrys.kodein.instance
 import com.github.salomonbrys.kodein.lazy
@@ -17,7 +16,6 @@ import io.chthonic.igdb.poc.utils.PagingUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import java.lang.ref.WeakReference
 
 
 /**

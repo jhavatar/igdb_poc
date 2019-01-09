@@ -17,10 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
-import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.lazy
 import io.chthonic.igdb.poc.R
-import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.data.model.Order

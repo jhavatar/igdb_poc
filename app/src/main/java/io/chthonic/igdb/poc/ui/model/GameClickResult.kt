@@ -8,5 +8,4 @@ import java.lang.ref.WeakReference
 /**
  * Created by jhavatar on 1/9/2019.
  */
-data class GameClickResult(val game: IgdbGame, val position: Int, val image: IgdbImage?, val imageView: WeakReference<View>) {
-}
+data class GameClickResult(val game: IgdbGame, val position: Int, val image: IgdbImage?, val imageView: WeakReference<View>)

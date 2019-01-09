@@ -39,7 +39,7 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         itemView.game_date
     }
 
-    fun update(game: IgdbGame, coverImage: IgdbImage?) {//coverRequest: Single<List<IgdbImage>>?) {
+    fun update(game: IgdbGame, coverImage: IgdbImage?) {
         itemView.game_name.text = game.name
 
         if (coverImage != null) {

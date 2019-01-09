@@ -17,7 +17,7 @@ class IgdbService(appContext: Context) {
 
     companion object {
         private const val BASE_URL = "https://api-v3.igdb.com/"
-        private val DEFAULT_HEADERS = mapOf<String, String>(Pair("user-key", "e35f126c2ae8a127b7696628d0d38260"))
+        private val DEFAULT_HEADERS = mapOf(Pair("user-key", "e35f126c2ae8a127b7696628d0d38260"))
         const val PAGE_SIZE = 20
     }
 

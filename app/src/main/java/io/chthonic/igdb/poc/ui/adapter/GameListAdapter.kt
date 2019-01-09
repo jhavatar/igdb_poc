@@ -3,12 +3,8 @@ package io.chthonic.igdb.poc.ui.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.lazy
 import com.jakewharton.rxbinding2.view.RxView
-import io.chthonic.igdb.poc.App
 import io.chthonic.igdb.poc.R
-import io.chthonic.igdb.poc.business.service.IgdbService
 import io.chthonic.igdb.poc.data.model.IgdbGame
 import io.chthonic.igdb.poc.data.model.IgdbImage
 import io.chthonic.igdb.poc.ui.model.GameClickResult
@@ -26,8 +22,6 @@ class GameListAdapter(private val gameSelectedPublisher: PublishSubject<GameClic
         private const val TYPE_EMPTY = 0
         private const val TYPE_GAME = 1
     }
-
-    private val igdbService: IgdbService by App.kodein.lazy.instance<IgdbService>()
 
     // Is true if a value has been explicitly set, be it data or error
     var hasValidData = false
