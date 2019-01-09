@@ -5,11 +5,9 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.support.v4.content.ContextCompat
-import android.support.v4.util.LruCache
 import android.support.v4.widget.ImageViewCompat
 import android.view.View
 import android.widget.ImageView
-import io.chthonic.igdb.poc.data.model.IgdbImage
 import timber.log.Timber
 
 
@@ -17,10 +15,6 @@ import timber.log.Timber
  * Created by jhavatar on 3/30/2018.
  */
 object UiUtils {
-
-    val coverImageCache by lazy {
-        LruCache<Long, IgdbImage>(500)
-    }
 
     fun tintImageView(imageView: ImageView, activity: Activity, colorRef: Int) {
         ImageViewCompat.setImageTintList(imageView,

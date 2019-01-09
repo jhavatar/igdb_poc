@@ -13,8 +13,6 @@ import io.chthonic.igdb.poc.data.model.Order
 import io.chthonic.igdb.poc.ui.vu.MainVu
 import io.chthonic.igdb.poc.utils.NetUtils
 import io.chthonic.igdb.poc.utils.PagingUtils
-import io.chthonic.igdb.poc.utils.UiUtils
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -179,49 +177,7 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
         }
         rxSubs.add(query
                 .flatMap{gameList: List<IgdbGame> ->
-                    val coverIds: List<Long> = gameList.mapNotNull {
-                        it.cover
-                    }
-                    Timber.d("coverIds = $coverIds")
-                    val cachedImagesMap = coverIds.mapNotNull {
-                        val img = UiUtils.coverImageCache.get(it)
-                        if (img != null) {
-                            UiUtils.coverImageCache.put(it, img) // re-cache
-                            it to img
-
-                        } else {
-                            null
-                        }
-
-                    }.toMap()
-                    Timber.d("cachedImagesMap size = ${cachedImagesMap.size}")
-
-                    if (cachedImagesMap.size == coverIds.size) {
-                        Single.fromCallable{
-                            Pair<List<IgdbGame>, Map<Long, IgdbImage>>(gameList, cachedImagesMap.toMap())
-                        }
-
-                    } else {
-
-                        val missingCoverIds = coverIds.filter {
-                            !cachedImagesMap.containsKey(it)
-                        }
-                        Timber.d("missingCoverIds = $missingCoverIds")
-
-                        igdbService.fetchCoverImages(missingCoverIds).map { coverList ->
-
-                            val fetchedImagesMap = coverList.map {
-                                UiUtils.coverImageCache.put(it.id, it) // cache
-                                it.id to it
-                            }.toMap()
-                            Timber.d("fetchedImagesMap size = ${fetchedImagesMap.size}")
-
-                            val imagesMap = fetchedImagesMap.toMutableMap()
-                            imagesMap.putAll(cachedImagesMap)
-
-                            Pair<List<IgdbGame>, Map<Long, IgdbImage>>(gameList, imagesMap.toMap())
-                        }
-                    }
+                    igdbService.fetchCoverImagesOptimized(gameList).map{ Pair(gameList, it) }
                 }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
