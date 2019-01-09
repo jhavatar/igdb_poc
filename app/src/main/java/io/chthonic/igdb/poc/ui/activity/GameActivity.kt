@@ -43,8 +43,8 @@ class GameActivity: BaseActivity() {
 
         // dynamically resize image view to find best fit for screen
         val imageView = this.game_image
-        val height = IgdbImage.WIDTH_LARGE
-        val width = IgdbImage.HEIGHT_LARGE
+        val height = IgdbImage.WIDTH_COVER_BIG
+        val width = IgdbImage.HEIGHT_COVER_BIG
         val params = imageView.layoutParams
         params.height = UiUtils.getMaxHeightForMaxWidth(this, width, height, 0.4)
 
@@ -52,7 +52,7 @@ class GameActivity: BaseActivity() {
 
             // Shared view animation should work fine since Picasso should have cached the image when displaying on the list
             Picasso.get()
-                    .load(image.largeUrl)
+                    .load(image.coverBigUrl)
                     .into(imageView)
 
         } else {

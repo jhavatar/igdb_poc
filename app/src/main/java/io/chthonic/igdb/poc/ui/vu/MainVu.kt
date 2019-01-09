@@ -273,7 +273,7 @@ class MainVu(inflater: LayoutInflater,
         intent.putExtra(GameActivity.KEY_ORDER, order.id)
 
         val sharedView = sharedViewRef.get()
-        if ((image?.largeUrl != null) && (sharedView != null)) {
+        if ((image != null) && (sharedView != null)) {
             intent.putExtra(GameActivity.KEY_IMAGE, image)
 
             // inform new activity of shared view animation

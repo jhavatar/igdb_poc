@@ -15,11 +15,12 @@ data class IgdbImage(val id: Long,
                      val animated: Boolean = false): Parcelable {
 
     companion object {
-        const val WIDTH_LARGE = 227
-        const val HEIGHT_LARGE = 320
+        // from https://api-docs.igdb.com/#images
+        const val WIDTH_COVER_BIG = 264
+        const val HEIGHT_COVER_BIG = 374
     }
 
-    val largeUrl: String?
+    val coverBigUrl: String?
         get() {
             return url?.let {
                 genUrl("cover_big")

@@ -44,7 +44,7 @@ class GameHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         if (coverImage != null) {
             Picasso.get()
-                    .load(coverImage.largeUrl)
+                    .load(coverImage.coverBigUrl)
                     .noFade()
                     .placeholder(R.drawable.ic_videogame_asset_grey_24dp)
                     .into(imageView)
