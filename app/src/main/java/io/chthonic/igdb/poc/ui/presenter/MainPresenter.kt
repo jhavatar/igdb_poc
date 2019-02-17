@@ -26,7 +26,7 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
     companion object {
         const val NO_PAGE = -1
         const val FIRST_PAGE = 0
-        const val LAST_PAGE = 4
+        const val LAST_PAGE = (100 / IgdbService.PAGE_SIZE) - 1
 
         private const val KEY_ORDER = "key_order"
     }
@@ -174,11 +174,12 @@ class MainPresenter(kodein: Kodein = App.kodein): BasePresenter<MainVu>() {
             Order.USER_REVIEW -> igdbService.fetchHighestUserRatedGames(page)
             Order.CRITIC_REVIEW -> igdbService.fetchHighestCriticRatedGames(page)
         }
+
         rxSubs.add(query
                 .flatMap{gameList: List<IgdbGame> ->
                     igdbService.fetchCoverImagesOptimized(gameList).map{ Pair(gameList, it) }
                 }
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({gamePair ->
                     val (gameList, coverMap) = gamePair
